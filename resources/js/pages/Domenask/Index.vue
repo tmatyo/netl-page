@@ -19,7 +19,12 @@ onMounted(async () => {
     <AdminLayout>
         <div class="grid grid-cols-12 gap-4 md:gap-6" v-if="data">
             <div class="col-span-12 space-y-6 xl:col-span-7">
-                <CrawlingInfo :latest="data?.loads_info.latest_load" :previous="data?.loads_info.previous_load" />
+                <CrawlingInfo
+                    :latest="data?.loads_info.latest_load"
+                    :previous="data?.loads_info.previous_load"
+                    :avgSpeed="data?.loads_info.average_download_speed_bytes_per_second"
+                    :avgDuration="data?.loads_info.crawling_average_duration_seconds"
+                />
                 <MonthlySale title="Monthly Saleeees" :data="data" />
             </div>
             <div class="col-span-12 xl:col-span-5">

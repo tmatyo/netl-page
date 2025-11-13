@@ -14,7 +14,7 @@ defineProps<Props>();
             <div>
                 <span class="text-sm text-gray-500 dark:text-gray-400">{{ title }}</span>
                 <h4 class="text-title-sm mt-2 font-bold text-gray-800 dark:text-white/90">
-                    {{ value }} <span v-if="suffix">{{ ` ${suffix}` }}</span>
+                    {{ Number(value) }} <span v-if="suffix">{{ ` ${suffix}` }}</span>
                 </h4>
             </div>
 
@@ -27,7 +27,7 @@ defineProps<Props>();
                     'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500': percentage < 0,
                 }"
             >
-                {{ percentage !== 0 ? `${percentage}%` : '-' }}
+                {{ percentage !== 0 ? `${Number(percentage)}%` : '-' }}
             </span>
         </div>
     </div>

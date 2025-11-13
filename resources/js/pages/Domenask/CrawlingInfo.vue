@@ -13,6 +13,8 @@ type CrawlInfo = {
 interface Props {
     latest: CrawlInfo;
     previous: CrawlInfo;
+    avgSpeed: number;
+    avgDuration: number;
 }
 const props = defineProps<Props>();
 console.log(props);
@@ -35,6 +37,7 @@ const getPercentage = (latest: number, previous: number): number => {
             suffix="s"
             :percentage="getPercentage(latest.crawling_duration, previous.crawling_duration)"
         />
+        <IndividualMetric title="Average crawling duration" :value="avgDuration.toFixed(4)" suffix="s" />
         <IndividualMetric
             title="Download duration"
             :value="latest.download_duration.toFixed(4)"
@@ -42,11 +45,12 @@ const getPercentage = (latest: number, previous: number): number => {
             :percentage="getPercentage(latest.download_duration, previous.download_duration)"
         />
         <IndividualMetric
-            title="Average speed"
+            title="Download speed"
             :value="Math.round(latest.avg_speed_in_bytes_per_sec / 1024 / 1024)"
             suffix="MB/s"
             :percentage="getPercentage(latest.avg_speed_in_bytes_per_sec, previous.avg_speed_in_bytes_per_sec)"
         />
+        <IndividualMetric title="Average download speed" :value="Math.round(avgSpeed / 1024 / 1024)" suffix="MB/s" />
         <IndividualMetric
             title="File size"
             :value="(latest.file_size / 1024 / 1024).toFixed(2)"
