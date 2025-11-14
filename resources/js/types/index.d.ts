@@ -17,3 +17,18 @@ export interface User {
     created_at: string;
     updated_at: string;
 }
+
+export type NumberOfDomainType = {
+    date_created: string;
+    domain_count: number;
+};
+
+export type CrawlingDurationType = {
+    date_created: string;
+    crawling_duration_seconds: number;
+};
+
+export type DownloadSpeedType = {
+    date_created: string;
+    download_speed_bytes_per_second: number;
+};

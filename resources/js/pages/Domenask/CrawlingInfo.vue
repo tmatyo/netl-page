@@ -15,6 +15,8 @@ interface Props {
     previous: CrawlInfo;
     avgSpeed: number;
     avgDuration: number;
+    avgDomainLength: number;
+    longestDomainLength: number;
 }
 const props = defineProps<Props>();
 console.log(props);
@@ -25,11 +27,19 @@ const getPercentage = (latest: number, previous: number): number => {
 };
 </script>
 <template>
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-6 xl:grid-cols-5">
         <IndividualMetric
             title="Number of domains"
             :value="latest.domain_count"
             :percentage="getPercentage(latest.domain_count, previous.domain_count)"
+        />
+        <IndividualMetric title="Average domain name length" :value="avgDomainLength" />
+        <IndividualMetric title="Longest domain name length" :value="longestDomainLength" />
+        <IndividualMetric
+            title="File size"
+            :value="(latest.file_size / 1024 / 1024).toFixed(2)"
+            suffix="MB"
+            :percentage="getPercentage(latest.file_size, previous.file_size)"
         />
         <IndividualMetric
             title="Crawling duration"
@@ -51,11 +61,5 @@ const getPercentage = (latest: number, previous: number): number => {
             :percentage="getPercentage(latest.avg_speed_in_bytes_per_sec, previous.avg_speed_in_bytes_per_sec)"
         />
         <IndividualMetric title="Average download speed" :value="Math.round(avgSpeed / 1024 / 1024)" suffix="MB/s" />
-        <IndividualMetric
-            title="File size"
-            :value="(latest.file_size / 1024 / 1024).toFixed(2)"
-            suffix="MB"
-            :percentage="getPercentage(latest.file_size, previous.file_size)"
-        />
     </div>
 </template>
