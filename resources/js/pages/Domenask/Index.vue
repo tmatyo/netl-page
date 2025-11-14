@@ -1,11 +1,19 @@
 <script setup lang="ts">
 import LineChart from '@/components/ecommerce/LineChart.vue';
 import MonthlyTarget from '@/components/ecommerce/MonthlyTarget.vue';
+import PieChart from '@/components/ecommerce/PieChart.vue';
 import RecentOrders from '@/components/ecommerce/RecentOrders.vue';
 import StatisticsChart from '@/components/ecommerce/StatisticsChart.vue';
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import useApi from '@/composables/useApi';
-import { CrawlingDurationType, DownloadSpeedType, NumberOfDomainType } from '@/types';
+import {
+    CrawlingDurationType,
+    DownloadSpeedType,
+    NameServerMarketShareType,
+    NumberOfDomainType,
+    OwnerMarketShareType,
+    RegistrarMarketShareType,
+} from '@/types';
 import { onMounted } from 'vue';
 import CrawlingInfo from './CrawlingInfo.vue';
 
@@ -54,6 +62,48 @@ onMounted(async () => {
                         "
                         dataTitle="Download speed (MB/s)"
                         :labels="data?.loads_info.download_speed_over_time.map((item: DownloadSpeedType) => item.date_created)"
+                    />
+                </div>
+                <div class="grid grid-cols-1 gap-4 xl:grid-cols-2 xl:gap-6">
+                    <PieChart
+                        title="Domain owner market share"
+                        :data="data?.owner_market_share.slice(0, 19).map((item: OwnerMarketShareType) => item.domain_count)"
+                        dataTitle="Number of domains"
+                        :labels="data?.owner_market_share.slice(0, 19).map((item: OwnerMarketShareType) => item.owner)"
+                    />
+                    <LineChart
+                        title="Domain owner market share"
+                        :data="data?.owner_market_share.slice(0, 19).map((item: OwnerMarketShareType) => item.domain_count)"
+                        dataTitle="Number of domains"
+                        :labels="data?.owner_market_share.slice(0, 19).map((item: OwnerMarketShareType) => item.owner)"
+                    />
+                </div>
+                <div class="grid grid-cols-1 gap-4 xl:grid-cols-2 xl:gap-6">
+                    <PieChart
+                        title="Domain registrar market share"
+                        :data="data?.registrar_market_share.slice(0, 19).map((item: RegistrarMarketShareType) => item.domain_count)"
+                        dataTitle="Number of domains"
+                        :labels="data?.registrar_market_share.slice(0, 19).map((item: RegistrarMarketShareType) => item.registrar)"
+                    />
+                    <LineChart
+                        title="Domain registrar market share"
+                        :data="data?.registrar_market_share.slice(0, 19).map((item: RegistrarMarketShareType) => item.domain_count)"
+                        dataTitle="Number of domains"
+                        :labels="data?.registrar_market_share.slice(0, 19).map((item: RegistrarMarketShareType) => item.registrar)"
+                    />
+                </div>
+                <div class="grid grid-cols-1 gap-4 xl:grid-cols-2 xl:gap-6">
+                    <PieChart
+                        title="Name server market share"
+                        :data="data?.name_server_market_share.slice(0, 19).map((item: NameServerMarketShareType) => item.count)"
+                        dataTitle="Number of domains"
+                        :labels="data?.name_server_market_share.slice(0, 19).map((item: NameServerMarketShareType) => item.ns)"
+                    />
+                    <LineChart
+                        title="Name server market share"
+                        :data="data?.name_server_market_share.slice(0, 19).map((item: NameServerMarketShareType) => item.count)"
+                        dataTitle="Number of domains"
+                        :labels="data?.name_server_market_share.slice(0, 19).map((item: NameServerMarketShareType) => item.ns)"
                     />
                 </div>
             </div>

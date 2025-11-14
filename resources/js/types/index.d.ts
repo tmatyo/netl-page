@@ -32,3 +32,22 @@ export type DownloadSpeedType = {
     date_created: string;
     download_speed_bytes_per_second: number;
 };
+
+export type OwnerMarketShareType = {
+    owner: string;
+    domain_count: number;
+    percentage: string;
+};
+
+
+export type RegistrarMarketShareType = {
+    registrar: string;
+    domain_count: number;
+    percentage: string;
+};
+
+export type NameServerMarketShareType = {
+    ns: string;
+    count: number;
+    percentage: string;
+};
