@@ -28,30 +28,34 @@ onMounted(async () => {
                     :avgDomainLength="data?.avg_domain_name_length"
                     :longestDomainLength="data?.longest_domain_name_length"
                 />
-                <LineChart
-                    title="Domain count over time"
-                    :data="data?.loads_info.number_of_domains_over_time.map((item: NumberOfDomainType) => item.domain_count)"
-                    dataTitle="Number of domains"
-                    :labels="data?.loads_info.number_of_domains_over_time.map((item: NumberOfDomainType) => item.date_created)"
-                />
-                <LineChart
-                    title="Crawling duration over time (seconds)"
-                    :data="
-                        data?.loads_info.crawling_duration_over_time.map((item: CrawlingDurationType) => item.crawling_duration_seconds.toFixed(4))
-                    "
-                    dataTitle="Crawling duration (s)"
-                    :labels="data?.loads_info.crawling_duration_over_time.map((item: CrawlingDurationType) => item.date_created)"
-                />
-                <LineChart
-                    title="Download speed over time (MB/s)"
-                    :data="
-                        data?.loads_info.download_speed_over_time.map((item: DownloadSpeedType) =>
-                            Math.round(item.download_speed_bytes_per_second / 1024 / 1024),
-                        )
-                    "
-                    dataTitle="Download speed (MB/s)"
-                    :labels="data?.loads_info.download_speed_over_time.map((item: DownloadSpeedType) => item.date_created)"
-                />
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 xl:gap-6">
+                    <LineChart
+                        title="Domain count over time"
+                        :data="data?.loads_info.number_of_domains_over_time.map((item: NumberOfDomainType) => item.domain_count)"
+                        dataTitle="Number of domains"
+                        :labels="data?.loads_info.number_of_domains_over_time.map((item: NumberOfDomainType) => item.date_created)"
+                    />
+                    <LineChart
+                        title="Crawling duration over time (seconds)"
+                        :data="
+                            data?.loads_info.crawling_duration_over_time.map((item: CrawlingDurationType) =>
+                                item.crawling_duration_seconds.toFixed(4),
+                            )
+                        "
+                        dataTitle="Crawling duration (s)"
+                        :labels="data?.loads_info.crawling_duration_over_time.map((item: CrawlingDurationType) => item.date_created)"
+                    />
+                    <LineChart
+                        title="Download speed over time (MB/s)"
+                        :data="
+                            data?.loads_info.download_speed_over_time.map((item: DownloadSpeedType) =>
+                                Math.round(item.download_speed_bytes_per_second / 1024 / 1024),
+                            )
+                        "
+                        dataTitle="Download speed (MB/s)"
+                        :labels="data?.loads_info.download_speed_over_time.map((item: DownloadSpeedType) => item.date_created)"
+                    />
+                </div>
             </div>
             <div class="col-span-12 xl:col-span-12">
                 <MonthlyTarget />
