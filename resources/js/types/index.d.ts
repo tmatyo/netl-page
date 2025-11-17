@@ -39,7 +39,6 @@ export type OwnerMarketShareType = {
     percentage: string;
 };
 
-
 export type RegistrarMarketShareType = {
     registrar: string;
     domain_count: number;
@@ -51,3 +50,19 @@ export type NameServerMarketShareType = {
     count: number;
     percentage: string;
 };
+
+export type CalendarHeatmapByDayType = {
+    expiry_day: string;
+    domain_count: number;
+};
+
+
+export type MonthsArrayType = {
+    name: string;
+    index: number;
+}
+
+export type CalendarHeatmapValue = {
+    name: string;
+    data: number[];
+}
