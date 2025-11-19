@@ -19,7 +19,7 @@
       />
     </svg>
     <svg
-      class="dark:hidden"
+      class="block dark:hidden"
       width="20"
       height="20"
       viewBox="0 0 20 20"
