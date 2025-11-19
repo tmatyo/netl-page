@@ -5,7 +5,7 @@ import DropdownMenu from '../common/DropdownMenu.vue';
 
 interface Props {
     title: string;
-    labels: string[] | number[];
+    labels: string[];
     data: number[];
     dataTitle: string;
     color?: string;
@@ -20,24 +20,7 @@ const menuItems = [
 const series = ref(props.data);
 
 const chartOptions = ref({
-    chart: {
-        width: 380,
-        type: 'pie',
-    },
     labels: props.labels,
-    responsive: [
-        {
-            breakpoint: 480,
-            options: {
-                chart: {
-                    width: 200,
-                },
-                legend: {
-                    position: 'bottom',
-                },
-            },
-        },
-    ],
 });
 </script>
 <template>
@@ -63,7 +46,7 @@ const chartOptions = ref({
 
         <div class="custom-scrollbar max-w-full overflow-x-auto">
             <div id="chartOne" class="-ml-5 min-w-[650px] pl-2 xl:min-w-full">
-                <VueApexCharts type="pie" height="180" :options="chartOptions" :series="series" />
+                <VueApexCharts type="pie" height="500" :options="chartOptions" :series="series" />
             </div>
         </div>
     </div>

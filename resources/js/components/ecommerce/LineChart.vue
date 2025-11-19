@@ -9,6 +9,7 @@ interface Props {
     data: number[];
     dataTitle: string;
     color?: string;
+    type: 'line' | 'bar';
 }
 const props = defineProps<Props>();
 
@@ -26,10 +27,8 @@ const series = ref([
 ]);
 
 const chartOptions = ref({
-    colors: ['#465fff'],
     chart: {
         fontFamily: 'Outfit, sans-serif',
-        type: 'bar',
         toolbar: {
             show: false,
         },
@@ -39,7 +38,6 @@ const chartOptions = ref({
             horizontal: false,
             columnWidth: '39%',
             borderRadius: 5,
-            borderRadiusApplication: 'end',
         },
     },
     dataLabels: {
@@ -61,15 +59,7 @@ const chartOptions = ref({
     },
     legend: {
         show: true,
-        position: 'top',
-        horizontalAlign: 'left',
         fontFamily: 'Outfit',
-        markers: {
-            radius: 99,
-        },
-    },
-    yaxis: {
-        title: false,
     },
     grid: {
         yaxis: {
@@ -117,7 +107,7 @@ const chartOptions = ref({
 
         <div class="custom-scrollbar max-w-full overflow-x-auto">
             <div id="chartOne" class="-ml-5 min-w-[650px] pl-2 xl:min-w-full">
-                <VueApexCharts type="bar" height="180" :options="chartOptions" :series="series" />
+                <VueApexCharts :type="type" height="350" :options="chartOptions" :series="series" />
             </div>
         </div>
     </div>
