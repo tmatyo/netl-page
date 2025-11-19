@@ -25,6 +25,8 @@ const getPercentage = (latest: number, previous: number): number => {
     const change: number = ((latest - previous) / previous) * 100;
     return previous !== 0 ? Number(change.toFixed(2)) : previous;
 };
+
+const userLocale: string = navigator.languages?.[0] || navigator.language || 'sk-SK';
 </script>
 <template>
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-6 xl:grid-cols-5">
@@ -33,8 +35,8 @@ const getPercentage = (latest: number, previous: number): number => {
             :value="latest.domain_count"
             :percentage="getPercentage(latest.domain_count, previous.domain_count)"
         />
-        <IndividualMetric title="Average domain name length" :value="avgDomainLength" />
-        <IndividualMetric title="Longest domain name length" :value="longestDomainLength" />
+        <IndividualMetric title="Average domain name length" :value="avgDomainLength" suffix="char" />
+        <IndividualMetric title="Longest domain name length" :value="longestDomainLength" suffix="char" />
         <IndividualMetric
             title="File size"
             :value="(latest.file_size / 1024 / 1024).toFixed(2)"
@@ -61,5 +63,6 @@ const getPercentage = (latest: number, previous: number): number => {
             :percentage="getPercentage(latest.avg_speed_in_bytes_per_sec, previous.avg_speed_in_bytes_per_sec)"
         />
         <IndividualMetric title="Average download speed" :value="Math.round(avgSpeed / 1024 / 1024)" suffix="MB/s" />
+        <IndividualMetric title="Data valid as of" :value="new Date(latest.time_generated).toLocaleString(userLocale)" />
     </div>
 </template>

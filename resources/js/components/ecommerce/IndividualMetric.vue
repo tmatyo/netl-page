@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+
 interface Props {
     title: string;
     value: string | number;
@@ -6,7 +8,9 @@ interface Props {
     percentage?: number;
     icon?: string;
 }
-defineProps<Props>();
+const props = defineProps<Props>();
+
+const valueToPrint = ref<string | number>(typeof props.value === 'string' ? props.value : Number(props.value));
 </script>
 <template>
     <div class="rounded-2xl border border-gray-200 bg-white p-5 md:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
@@ -14,7 +18,7 @@ defineProps<Props>();
             <div>
                 <span class="text-sm text-gray-500 dark:text-gray-400">{{ title }}</span>
                 <h4 class="text-title-sm mt-2 font-bold text-gray-800 dark:text-white/90">
-                    {{ Number(value) }} <span v-if="suffix">{{ ` ${suffix}` }}</span>
+                    {{ valueToPrint }} <span v-if="suffix">{{ ` ${suffix}` }}</span>
                 </h4>
             </div>
 
