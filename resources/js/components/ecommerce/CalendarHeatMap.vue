@@ -64,7 +64,7 @@ const monthlyData = ref<CalendarHeatmapValue[]>(
 
 const chartOptions = ref({
     dataLabels: {
-        enabled: false,
+        //enabled: false,
     },
     colors: ['#008FFB'],
     plotOptions: {

@@ -36,7 +36,6 @@ const chartOptions = ref({
     plotOptions: {
         bar: {
             horizontal: false,
-            columnWidth: '39%',
             borderRadius: 5,
         },
     },
@@ -107,7 +106,7 @@ const chartOptions = ref({
 
         <div class="custom-scrollbar max-w-full overflow-x-auto">
             <div id="chartOne" class="-ml-5 min-w-[650px] pl-2 xl:min-w-full">
-                <VueApexCharts :type="type" height="350" :options="chartOptions" :series="series" />
+                <VueApexCharts :type="type" height="auto" :options="chartOptions" :series="series" />
             </div>
         </div>
     </div>

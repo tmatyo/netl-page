@@ -69,7 +69,7 @@ onMounted(async () => {
                     />
                 </div>
                 <div class="grid grid-cols-1 gap-4 xl:grid-cols-1 xl:gap-6">
-                    <CalendarHeatMap title="Number of expiring domains per day" :data="data?.calendar_heatmap_by_day.slice(0, 365)" />
+                    <CalendarHeatMap title="Number of expiring domains (per day) in the next year" :data="data?.calendar_heatmap_by_day.slice(0, 365)" />
                 </div>
                 <div class="grid grid-cols-1 gap-4 xl:grid-cols-3 xl:gap-6">
                 <div class="grid grid-rows-1 gap-4 xl:grid-rows-2 xl:gap-6">
