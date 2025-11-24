@@ -1,3 +1,75 @@
+<script setup lang="ts">
+import { computed } from 'vue';
+
+import { useSidebar } from '@/composables/useSidebar';
+import { Link } from '@inertiajs/vue3';
+import { ChevronDownIcon, GridIcon, HorizontalDots } from '../../icons';
+import SidebarWidget from './SidebarWidget.vue';
+
+const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar();
+type MenuGroupType = {
+    title: string;
+    items: Array<{
+        icon: any;
+        name: string;
+        path?: string;
+        subItems?: Array<{
+            name: string;
+            path: string;
+            pro?: boolean;
+            new?: boolean;
+        }>;
+    }>;
+};
+const menuGroups: MenuGroupType[] = [
+    {
+        title: 'Menu',
+        items: [
+            {
+                icon: GridIcon,
+                name: 'Domain SK',
+                subItems: [
+                    { name: 'Statistics', path: '/domainsk/', pro: false },
+                    { name: 'Domain list', path: '/domainsk/domain-list', pro: false },
+                    { name: 'Domain owners', path: '/domainsk/domain-owners', pro: false },
+                    { name: 'Domain registrars', path: '/domainsk/domain-registrars', pro: false },
+                ],
+            },
+        ],
+    },
+];
+
+const isActive = (path: string) => window.location.pathname === path;
+
+const toggleSubmenu = (groupIndex: number, itemIndex: number) => {
+    const key = `${groupIndex}-${itemIndex}`;
+    openSubmenu.value = openSubmenu.value === key ? null : key;
+};
+
+const isAnySubmenuRouteActive = computed(() => {
+    return menuGroups.some((group) => group.items.some((item) => item.subItems && item.subItems.some((subItem) => isActive(subItem.path))));
+});
+
+const isSubmenuOpen = (groupIndex: number, itemIndex: number) => {
+    const key = `${groupIndex}-${itemIndex}`;
+    return (
+        openSubmenu.value === key ||
+        (isAnySubmenuRouteActive.value && menuGroups[groupIndex].items[itemIndex].subItems?.some((subItem) => isActive(subItem.path)))
+    );
+};
+
+const startTransition = (el: Element) => {
+    (el as HTMLElement).style.height = 'auto';
+    const height = el.scrollHeight;
+    (el as HTMLElement).style.height = '0px';
+    (el as HTMLElement).offsetHeight; // force reflow
+    (el as HTMLElement).style.height = height + 'px';
+};
+
+const endTransition = (el: Element) => {
+    (el as HTMLElement).style.height = '';
+};
+</script>
 <template>
     <aside
         :class="[
@@ -153,63 +225,3 @@
         </div>
     </aside>
 </template>
-
-<script setup>
-import { computed } from 'vue';
-
-import { useSidebar } from '@/composables/useSidebar';
-import { ChevronDownIcon, GridIcon, HorizontalDots } from '../../icons';
-import SidebarWidget from './SidebarWidget.vue';
-import { Link } from '@inertiajs/vue3';
-
-const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar();
-
-const menuGroups = [
-    {
-        title: 'Menu',
-        items: [
-            {
-                icon: GridIcon,
-                name: 'Domain SK',
-                subItems: [
-                    { name: 'Statistics', path: '/domainsk/', pro: false },
-                    { name: 'Domain list', path: '/domainsk/domain-list', pro: false },
-                    { name: 'Domain owners', path: '/domainsk/domain-owners', pro: false },
-                    { name: 'Domain registrars', path: '/domainsk/domain-registrars', pro: false },
-                ],
-            },
-        ],
-    },
-];
-
-const isActive = (path) => window.location.path === path;
-
-const toggleSubmenu = (groupIndex, itemIndex) => {
-    const key = `${groupIndex}-${itemIndex}`;
-    openSubmenu.value = openSubmenu.value === key ? null : key;
-};
-
-const isAnySubmenuRouteActive = computed(() => {
-    return menuGroups.some((group) => group.items.some((item) => item.subItems && item.subItems.some((subItem) => isActive(subItem.path))));
-});
-
-const isSubmenuOpen = (groupIndex, itemIndex) => {
-    const key = `${groupIndex}-${itemIndex}`;
-    return (
-        openSubmenu.value === key ||
-        (isAnySubmenuRouteActive.value && menuGroups[groupIndex].items[itemIndex].subItems?.some((subItem) => isActive(subItem.path)))
-    );
-};
-
-const startTransition = (el) => {
-    el.style.height = 'auto';
-    const height = el.scrollHeight;
-    el.style.height = '0px';
-    el.offsetHeight; // force reflow
-    el.style.height = height + 'px';
-};
-
-const endTransition = (el) => {
-    el.style.height = '';
-};
-</script>
