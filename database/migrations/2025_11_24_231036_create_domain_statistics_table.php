@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('domain_statistics', function (Blueprint $table) {
             $table->id();
             $table->integer('data_length_in_bytes');
+            $table->float('data_extraction_duration_in_seconds');
             $table->string('longest_domain_name', 255);
             $table->integer('longest_domain_name_length');
             $table->float('avg_domain_name_length');
