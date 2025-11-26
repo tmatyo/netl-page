@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CalendarHeatmapByDay;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\DomainStatistic;
@@ -22,6 +23,7 @@ class ApiController extends Controller
             # Create and save DomainStatistic
             $domainStatistic = new DomainStatistic([
                 'data_length_in_bytes' => $data['data_length_in_bytes'] ?? null,
+                'data_extraction_duration_in_seconds' => $data['data_extraction_duration_in_seconds'] ?? null,
                 'longest_domain_name' => $data['longest_domain_name'] ?? null,
                 'longest_domain_name_length' => $data['longest_domain_name_length'] ?? null,
                 'avg_domain_name_length' => $data['avg_domain_name_length'] ?? null,
@@ -39,6 +41,17 @@ class ApiController extends Controller
                 $crawlingLatest->save();
             }
 
+            if (!empty($data['calendar_heatmap_by_day'])) {
+                foreach (array_chunk($data['calendar_heatmap_by_day'], 1000) as $chunk) {
+                    $now = now();
+                    $chunk = array_map(function ($c) use ($now) {
+                        $c['created_at'] = $now;
+                        $c['updated_at'] = $now;
+                        return $c;
+                    }, $chunk);
+                    CalendarHeatmapByDay::query()->insert($chunk);
+                }
+            }
         });
 
         return response()->json([
