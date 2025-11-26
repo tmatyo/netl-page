@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('name_server_market_shares', function (Blueprint $table) {
             $table->id();
             $table->string('ns');
-            $table->integer('domain_count');
+            $table->integer('count');
             $table->timestamps();
         });
     }

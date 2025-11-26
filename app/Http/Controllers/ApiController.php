@@ -2,17 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CalendarHeatmapByDay;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\DomainStatistic;
 use App\Models\Crawling;
+use App\Models\CalendarHeatmapByDay;
+use App\Models\OwnerMarketShare;
+use App\Models\RegistrarMarketShare;
+use App\Models\NameServerMarketShare;
 
 class ApiController extends Controller
 {
     public function index()
     {
         return response()->json(['message' => 'API is working', 'ok' => true]);
+    }
+
+    private function parseAndSaveMarketShareData(array $data, string $model, int $chunkSize) {
+                    if (!empty($data)) {
+                foreach (array_chunk($data, 1000) as $chunk) {
+                    $now = now();
+                    $chunk = array_map(function ($c) use ($now) {
+                        $c['created_at'] = $now;
+                        $c['updated_at'] = $now;
+                        return $c;
+                    }, $chunk);
+                    $model::query()->insert($chunk);
+                }
+            }
     }
 
     public function import(Request $request)
@@ -41,17 +58,11 @@ class ApiController extends Controller
                 $crawlingLatest->save();
             }
 
-            if (!empty($data['calendar_heatmap_by_day'])) {
-                foreach (array_chunk($data['calendar_heatmap_by_day'], 1000) as $chunk) {
-                    $now = now();
-                    $chunk = array_map(function ($c) use ($now) {
-                        $c['created_at'] = $now;
-                        $c['updated_at'] = $now;
-                        return $c;
-                    }, $chunk);
-                    CalendarHeatmapByDay::query()->insert($chunk);
-                }
-            }
+            # Save market share and heatmap data
+            $this->parseAndSaveMarketShareData($data['calendar_heatmap_by_day'] ?? [], CalendarHeatmapByDay::class, 1000);
+            $this->parseAndSaveMarketShareData($data['owner_market_share'] ?? [], OwnerMarketShare::class, 1000);
+            $this->parseAndSaveMarketShareData($data['registrar_market_share'] ?? [], RegistrarMarketShare::class, 1000);
+            $this->parseAndSaveMarketShareData($data['name_server_market_share'] ?? [], NameServerMarketShare::class, 1000);
         });
 
         return response()->json([
