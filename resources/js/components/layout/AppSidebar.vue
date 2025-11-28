@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-
+import {  } from '@/routes'
 import { useSidebar } from '@/composables/useSidebar';
 import { Link } from '@inertiajs/vue3';
 import { ChevronDownIcon, GridIcon, HorizontalDots } from '../../icons';
@@ -30,9 +30,10 @@ const menuGroups: MenuGroupType[] = [
                 name: 'Domain SK',
                 subItems: [
                     { name: 'Statistics', path: '/domainsk/', pro: false },
-                    { name: 'Domain list', path: '/domainsk/domain-list', pro: false },
-                    { name: 'Domain owners', path: '/domainsk/domain-owners', pro: false },
-                    { name: 'Domain registrars', path: '/domainsk/domain-registrars', pro: false },
+                    { name: 'Domains', path: '/domainsk/domain-list', pro: false },
+                    { name: 'Owners', path: '/domainsk/owners-marketshare', pro: false },
+                    { name: 'Registrars', path: '/domainsk/registrars-marketshare', pro: false },
+                    { name: 'Nameservers', path: '/domainsk/nameserver-marketshare', pro: false },
                 ],
             },
         ],

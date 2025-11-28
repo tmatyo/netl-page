@@ -9,16 +9,16 @@ class DomainSkController extends Controller
     {
         return Inertia::render('Domenask');
     }
-    public function domainList()
+    public function OwnersMarketshare()
     {
-        return Inertia::render('Domenask/DomainList');
+        return Inertia::render('Domenask/OwnersMarketshare');
     }
-    public function domainOwners()
+    public function RegistrarsMarketshare()
     {
-        return Inertia::render('Domenask/DomainOwners');
+        return Inertia::render('Domenask/RegistrarsMarketshare');
     }
-    public function domainRegistrars()
+    public function NameserverMarketshare()
     {
-        return Inertia::render('Domenask/DomainRegistrars');
+        return Inertia::render('Domenask/NameserverMarketshare');
     }
 }
