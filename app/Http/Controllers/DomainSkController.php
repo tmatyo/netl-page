@@ -1,6 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\OwnerMarketShare;
+use App\Models\RegistrarMarketShare;
+use App\Models\NameserverMarketShare;
 use Inertia\Inertia;
 
 class DomainSkController extends Controller
@@ -9,16 +13,22 @@ class DomainSkController extends Controller
     {
         return Inertia::render('Domenask');
     }
-    public function OwnersMarketshare()
+    public function ownersMarketshare()
     {
-        return Inertia::render('Domenask/OwnersMarketshare');
+        return Inertia::render('Domenask/OwnersMarketshare', [
+            'ownersMarketShare' => OwnerMarketShare::query()->orderBy('domain_count', 'desc')->paginate(20)
+        ]);
     }
-    public function RegistrarsMarketshare()
+    public function registrarsMarketshare()
     {
-        return Inertia::render('Domenask/RegistrarsMarketshare');
+        return Inertia::render('Domenask/RegistrarsMarketshare', [
+            'registrarsMarketShare' => RegistrarMarketShare::query()->orderBy('domain_count', 'desc')->paginate(20)
+        ]);
     }
-    public function NameserverMarketshare()
+    public function nameserverMarketshare()
     {
-        return Inertia::render('Domenask/NameserverMarketshare');
+        return Inertia::render('Domenask/NameserverMarketshare', [
+            'nameserverMarketShare' => NameserverMarketShare::query()->orderBy('count', 'desc')->paginate(20)
+        ]);
     }
 }

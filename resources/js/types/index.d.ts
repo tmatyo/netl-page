@@ -34,18 +34,21 @@ export type DownloadSpeedType = {
 };
 
 export type OwnerMarketShareType = {
+    id: number;
     owner: string;
     domain_count: number;
     percentage: string;
 };
 
 export type RegistrarMarketShareType = {
+    id: number;
     registrar: string;
     domain_count: number;
     percentage: string;
 };
 
 export type NameServerMarketShareType = {
+    id: number;
     ns: string;
     count: number;
     percentage: string;
@@ -65,4 +68,14 @@ export type MonthsArrayType = {
 export type CalendarHeatmapValue = {
     name: string;
     data: number[];
+}
+
+export interface PaginationType<T> {
+  data: T[];
+  current_page: number;
+  last_page: number;
+  first_page_url: string;
+  prev_page_url: string;
+  next_page_url: string;
+  last_page_url: string;
 }
