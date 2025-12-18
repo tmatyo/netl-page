@@ -33,6 +33,19 @@ export type DownloadSpeedType = {
     download_speed_bytes_per_second: number;
 };
 
+export type DomainsType = {
+    id: number;
+    domain: string;
+    id_reg: string;
+    id_owner: string;
+    status: string;
+    ns1: string;
+    ns2: string;
+    ns3: string;
+    ns4: string;
+    expiry_date: string;
+};
+
 export type OwnerMarketShareType = {
     id: number;
     owner: string;
@@ -59,23 +72,22 @@ export type CalendarHeatmapByDayType = {
     domain_count: number;
 };
 
-
 export type MonthsArrayType = {
     name: string;
     index: number;
-}
+};
 
 export type CalendarHeatmapValue = {
     name: string;
     data: number[];
-}
+};
 
 export interface PaginationType<T> {
-  data: T[];
-  current_page: number;
-  last_page: number;
-  first_page_url: string;
-  prev_page_url: string;
-  next_page_url: string;
-  last_page_url: string;
+    data: T[];
+    current_page: number;
+    last_page: number;
+    first_page_url: string;
+    prev_page_url: string;
+    next_page_url: string;
+    last_page_url: string;
 }

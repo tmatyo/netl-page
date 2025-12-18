@@ -14,13 +14,22 @@ use App\Models\NameServerMarketShare;
 class ApiController extends Controller
 {
     private const CHUNK_SIZE = 1000;
-    
+
     public function index()
     {
-        return response()->json(['message' => 'API is working', 'ok' => true]);
+        return response()->json([
+            'load_time' => now()->toDateTimeString(),
+            'message' => 'API is working',
+            'ok' => true
+        ]);
     }
 
-    private function parseAndSaveMarketShareData(array $data, string $model, int $chunkSize = 1000)
+    private function parseAndSaveDomains(array $domains)
+    {
+        DB::table('domains')->insert($domains);
+    }
+
+    private function parseAndSaveMarketShareData(array $data, string $model, int $chunkSize = self::CHUNK_SIZE)
     {
         if (!empty($data)) {
             foreach (array_chunk($data, $chunkSize) as $chunk) {
@@ -39,6 +48,9 @@ class ApiController extends Controller
     {
         $data = $request->json()->all();
         DB::transaction(function () use ($data) {
+
+            # the domains
+            $this->parseAndSaveDomains($data['domains'] ?? []);
 
             # Create and save DomainStatistic
             $domainStatistic = new DomainStatistic([
@@ -69,6 +81,7 @@ class ApiController extends Controller
         });
 
         return response()->json([
+            'load_time' => now()->toDateTimeString(),
             'imported_data' => 123,
             'ok' => true
         ]);

@@ -7,8 +7,9 @@ defineProps<{ registrarsMarketShare: PaginationType<RegistrarMarketShareType> }>
 
 <template>
     <AdminLayout>
-        <h1>Registrar Marketshare</h1>
-        <div v-if="registrarsMarketShare">
+        <h1 class="font-size-3xl text-[var(--color-brand-500)]">Registrar Marketshare</h1>
+        <h3 v-if="registrarsMarketShare.data.length > 0" class="text-[var(--color-brand-500)]">{{ registrarsMarketShare.data.length }} lines</h3>
+        <div class="my-3" v-if="registrarsMarketShare">
             <Pagination
                 v-if="registrarsMarketShare.last_page > 1"
                 :data="{ current_page: registrarsMarketShare.current_page, last_page: registrarsMarketShare.last_page }"

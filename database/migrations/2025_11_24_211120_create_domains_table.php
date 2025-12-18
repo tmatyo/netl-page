@@ -12,10 +12,15 @@ return new class extends Migration {
     {
         Schema::create('domains', function (Blueprint $table) {
             $table->id();
-            $table->string('domain', 255);
-            $table->foreignId('registrar_id')->constrained()->onDelete('cascade');
-            $table->foreignId('owner_id')->constrained()->onDelete('cascade');
-            $table->string('expiry_date', 10);
+            $table->string('domain');
+            $table->string('id_reg')->nullable();
+            $table->string('id_owner')->nullable();
+            $table->string('status')->nullable();
+            $table->string('ns1')->nullable();
+            $table->string('ns2')->nullable();
+            $table->string('ns3')->nullable();
+            $table->string('ns4')->nullable();
+            $table->string('expiry_date')->nullable();
             $table->timestamps();
         });
     }

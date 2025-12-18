@@ -7,8 +7,9 @@ defineProps<{ nameserverMarketShare: PaginationType<NameServerMarketShareType> }
 
 <template>
     <AdminLayout>
-        <h1 class="font-size-3xl">Name Server Marketshare</h1>
-        <div v-if="nameserverMarketShare">
+        <h1 class="font-size-3xl text-[var(--color-brand-500)]">Name Server Marketshare</h1>
+        <h3 v-if="nameserverMarketShare.data.length > 0" class="text-[var(--color-brand-500)]">{{ nameserverMarketShare.data.length }} lines</h3>
+        <div class="my-3" v-if="nameserverMarketShare">
             <Pagination
                 v-if="nameserverMarketShare.last_page > 1"
                 :data="{ current_page: nameserverMarketShare.current_page, last_page: nameserverMarketShare.last_page }"

@@ -7,8 +7,9 @@ defineProps<{ ownersMarketShare: PaginationType<OwnerMarketShareType> }>();
 
 <template>
     <AdminLayout>
-        <h1>Owners Marketshare</h1>
-        <div v-if="ownersMarketShare">
+        <h1 class="font-size-3xl text-[var(--color-brand-500)]">Owner Marketshare</h1>
+        <h3 v-if="ownersMarketShare.data.length > 0" class="text-[var(--color-brand-500)]">{{ ownersMarketShare.data.length }} lines</h3>
+        <div class="my-3" v-if="ownersMarketShare">
             <Pagination
                 v-if="ownersMarketShare.last_page > 1"
                 :data="{ current_page: ownersMarketShare.current_page, last_page: ownersMarketShare.last_page }"
