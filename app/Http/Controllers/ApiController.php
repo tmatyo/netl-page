@@ -46,10 +46,66 @@ class ApiController extends Controller
 
     public function import(Request $request)
     {
-        $data = $request->json()->all();
+
+        # set higher memory limit and execution time
+        ini_set("memory_limit", "1024M");
+
+        # validate input file
+        try {
+            $request->validate([
+                'data_gz' => 'required|file|max:40960', // max 40 MB
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'load_time' => now()->toDateTimeString(),
+                'message' => 'Error during import: ' . $e->getMessage(),
+                'ok' => false
+            ], 422);
+        }
+
+        # is the file valid?
+        $file = $request->file('data_gz');
+        if (!$file || !$file->isValid()) {
+            return response()->json([
+                'load_time' => now()->toDateTimeString(),
+                'message' => 'No valid file uploaded',
+                'ok' => false
+            ], 500);
+        }
+
+        # read and decompress the file
+        $contents = file_get_contents($file->getRealPath());
+        if ($contents === false) {
+            return response()->json([
+                'load_time' => now()->toDateTimeString(),
+                'message' => 'Failed to read the uploaded file',
+                'ok' => false
+            ], 500);
+        }
+
+        # decode gzipped content
+        $decompressed = gzdecode($contents);
+        if ($decompressed === false) {
+            return response()->json([
+                'load_time' => now()->toDateTimeString(),
+                'message' => 'Failed to decompress the uploaded file',
+                'ok' => false
+            ], 500);
+        }
+
+        # parse JSON
+        $data = json_decode($decompressed, true);
+        if ($data === null) {
+            return response()->json([
+                'load_time' => now()->toDateTimeString(),
+                'message' => 'Failed to parse JSON from the uploaded file',
+                'ok' => false
+            ], 400);
+        }
+
         DB::transaction(function () use ($data) {
 
-            # the domains
+            # get and save the domains
             $this->parseAndSaveDomains($data['domains'] ?? []);
 
             # Create and save DomainStatistic
@@ -82,8 +138,8 @@ class ApiController extends Controller
 
         return response()->json([
             'load_time' => now()->toDateTimeString(),
-            'imported_data' => 123,
+            'imported_data' => "datata ratata",
             'ok' => true
-        ]);
+        ], 201);
     }
 }
