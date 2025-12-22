@@ -10,6 +10,8 @@ use App\Models\CalendarHeatmapByDay;
 use App\Models\OwnerMarketShare;
 use App\Models\RegistrarMarketShare;
 use App\Models\NameServerMarketShare;
+use App\Services\DomainSk;
+use App\Services\Stats;
 
 class ApiController extends Controller
 {
@@ -24,27 +26,7 @@ class ApiController extends Controller
         ]);
     }
 
-    private function parseAndSaveDomains(array $domains)
-    {
-        DB::table('domains')->insert($domains);
-    }
-
-    private function parseAndSaveMarketShareData(array $data, string $model, int $chunkSize = self::CHUNK_SIZE)
-    {
-        if (!empty($data)) {
-            foreach (array_chunk($data, $chunkSize) as $chunk) {
-                $now = now();
-                $chunk = array_map(function ($c) use ($now) {
-                    $c['created_at'] = $now;
-                    $c['updated_at'] = $now;
-                    return $c;
-                }, $chunk);
-                $model::query()->insert($chunk);
-            }
-        }
-    }
-
-    public function import(Request $request)
+    public function import(Request $request, DomainSk $domainSk, Stats $stats)
     {
 
         # set higher memory limit and execution time
@@ -103,10 +85,10 @@ class ApiController extends Controller
             ], 400);
         }
 
-        DB::transaction(function () use ($data) {
+        DB::transaction(function () use ($data, $domainSk, $stats) {
 
             # get and save the domains
-            $this->parseAndSaveDomains($data['domains'] ?? []);
+            $domainSk->saveDomains($data['domains'] ?? []);
 
             # Create and save DomainStatistic
             $domainStatistic = new DomainStatistic([
@@ -130,15 +112,20 @@ class ApiController extends Controller
             }
 
             # Save market share and heatmap data
-            $this->parseAndSaveMarketShareData($data['calendar_heatmap_by_day'] ?? [], CalendarHeatmapByDay::class, self::CHUNK_SIZE);
-            $this->parseAndSaveMarketShareData($data['owner_market_share'] ?? [], OwnerMarketShare::class, self::CHUNK_SIZE);
-            $this->parseAndSaveMarketShareData($data['registrar_market_share'] ?? [], RegistrarMarketShare::class, self::CHUNK_SIZE);
-            $this->parseAndSaveMarketShareData($data['name_server_market_share'] ?? [], NameServerMarketShare::class, self::CHUNK_SIZE);
+            $stats->parseAndSaveMarketShareData($data['calendar_heatmap_by_day'] ?? [], CalendarHeatmapByDay::class, self::CHUNK_SIZE);
+            $stats->parseAndSaveMarketShareData($data['owner_market_share'] ?? [], OwnerMarketShare::class, self::CHUNK_SIZE);
+            $stats->parseAndSaveMarketShareData($data['registrar_market_share'] ?? [], RegistrarMarketShare::class, self::CHUNK_SIZE);
+            $stats->parseAndSaveMarketShareData($data['name_server_market_share'] ?? [], NameServerMarketShare::class, self::CHUNK_SIZE);
         });
 
         return response()->json([
             'load_time' => now()->toDateTimeString(),
-            'imported_data' => "datata ratata",
+            'imported_data' => $data['domains'][0], //"datata ratata",
+            'type' => gettype($data['domains'][0]),
+            'is_array' => is_array($data['domains'][0]),
+            'is_object' => is_object($data['domains'][0]),
+            'memory_usage' => memory_get_usage(true) / 1024 / 1024 . " MB",
+            'memory_limit' => ini_get("memory_limit"),
             'ok' => true
         ], 201);
     }
