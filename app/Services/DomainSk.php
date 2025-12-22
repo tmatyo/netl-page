@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Exception;
 
 class DomainSk
@@ -22,17 +23,22 @@ class DomainSk
         $domainCount = count($domains);
 
         if ($domainCount === 0) {
+            Log::error("DOMENASK: No domains to process.");
             return;
         }
 
         # determine the type of the first element
         $type = gettype($domains[0] ?? null);
+        Log::info("DOMENASK: Processing domains as " . $type . " type.");
 
         # process data based on type
         if ($type === 'array') {
             $this->saveDomainsLineTypeArray($domains, $tableName, $domainCount);
         } elseif ($type === 'string') {
             $this->saveDomainsLineTypeString($domains, $tableName, $domainCount);
+        } else {
+            Log::error("DOMENASK: Unsupported domain data type: " . $type);
+            return;
         }
     }
 
@@ -65,7 +71,7 @@ class DomainSk
                     DB::statement('INSERT INTO `' . $tableName . '` (domain, id_reg, id_owner, ns1, ns2, ns3, ns4, expiry_date, created_at, updated_at) VALUES ' . implode(',', $parsedValues));
                     $parsedValues = [];
                 } catch (Exception $ex) {
-                    error_log("DOMENASK: Data insertion failed: " . $ex->getMessage());
+                    Log::error("DOMENASK: Data insertion failed: " . $ex->getMessage());
                     exit;
                 }
             }
@@ -86,7 +92,7 @@ class DomainSk
                     DB::table($tableName)->insert($parsedValues);
                     $parsedValues = [];
                 } catch (Exception $ex) {
-                    error_log("DOMENASK: Data insertion failed: " . $ex->getMessage());
+                    Log::error("DOMENASK: Data insertion failed: " . $ex->getMessage());
                     exit;
                 }
             }
