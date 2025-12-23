@@ -12,7 +12,6 @@ return new class extends Migration {
     {
         Schema::create('metrics', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('crawling_id')->constrained()->onDelete('cascade');
             $table->enum('metric_type', ['number_of_domains', 'crawling_duration', 'download_speed']);
             $table->date('date');
             $table->float('value');

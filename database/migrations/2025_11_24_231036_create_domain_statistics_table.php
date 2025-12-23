@@ -17,6 +17,8 @@ return new class extends Migration {
             $table->string('longest_domain_name', 255);
             $table->integer('longest_domain_name_length');
             $table->float('avg_domain_name_length');
+            $table->integer('crawling_average_duration_seconds')->nullable();
+            $table->integer('average_download_speed_bytes_per_second')->nullable();
             $table->timestamps();
         });
     }

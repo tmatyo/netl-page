@@ -8,7 +8,6 @@ use App\Models\Crawling;
 class Metric extends Model
 {
     protected $fillable = [
-        'crawling_id',
         'metric_type',
         'date',
         'value',

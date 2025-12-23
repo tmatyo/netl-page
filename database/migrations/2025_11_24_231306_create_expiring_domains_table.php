@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('expiring_domains', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('domain_id')->constrained()->onDelete('cascade');
+            $table->string('domain');
             $table->string('expiry_date', 10);
             $table->timestamps();
         });
