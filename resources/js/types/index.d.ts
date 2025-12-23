@@ -18,20 +18,10 @@ export interface User {
     updated_at: string;
 }
 
-export type NumberOfDomainType = {
-    date_created: string;
-    domain_count: number;
-};
-
-export type CrawlingDurationType = {
-    date_created: string;
-    crawling_duration_seconds: number;
-};
-
-export type DownloadSpeedType = {
-    date_created: string;
-    download_speed_bytes_per_second: number;
-};
+export type MetricType = {
+    value: number;
+    date: string;
+}
 
 export type DomainsType = {
     id: number;
@@ -91,3 +81,27 @@ export interface PaginationType<T> {
     next_page_url: string;
     last_page_url: string;
 }
+
+export type CrawlInfo = {
+    id: number;
+    domain_count: number;
+    crawling_duration: number;
+    download_duration: number;
+    avg_speed_in_bytes_per_sec: number;
+    file_size: number;
+    time_generated: string;
+    table_name: string;
+};
+
+export type DomainStatisticsType = {
+    avg_domain_name_length: number;
+    created_at: string;
+    data_extraction_duration_in_seconds: number;
+    data_length_in_bytes: number;
+    id: number;
+    longest_domain_name: string;
+    longest_domain_name_length: number;
+    updated_at: string;
+    crawling_average_duration_seconds: number;
+    average_download_speed_bytes_per_second: number;
+};

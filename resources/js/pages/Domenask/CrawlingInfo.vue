@@ -1,15 +1,7 @@
 <script setup lang="ts">
 import IndividualMetric from '@/components/ecommerce/IndividualMetric.vue';
-type CrawlInfo = {
-    id: number;
-    domain_count: number;
-    crawling_duration: number;
-    download_duration: number;
-    avg_speed_in_bytes_per_sec: number;
-    file_size: number;
-    time_generated: string;
-    table_name: string;
-};
+import { CrawlInfo } from '@/types';
+
 interface Props {
     latest: CrawlInfo;
     previous: CrawlInfo;

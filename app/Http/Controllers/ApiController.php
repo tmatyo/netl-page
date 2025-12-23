@@ -13,6 +13,8 @@ use App\Models\RegistrarMarketShare;
 use App\Models\NameServerMarketShare;
 use App\Services\DomainSk;
 use App\Services\Stats;
+use App\Services\ExpiringDomains;
+use App\Services\Metrics;
 use Throwable;
 
 class ApiController extends Controller
@@ -28,7 +30,7 @@ class ApiController extends Controller
         ]);
     }
 
-    public function import(Request $request, DomainSk $domainSk, Stats $stats)
+    public function import(Request $request, DomainSk $domainSk, Stats $stats, ExpiringDomains $expiringDomains, Metrics $metricService)
     {
 
         # set higher memory limit and execution time
@@ -70,10 +72,13 @@ class ApiController extends Controller
 
         # process and save data within a transaction
         try {
-            DB::transaction(function () use ($data, $domainSk, $stats) {
+            DB::transaction(function () use ($data, $domainSk, $stats, $expiringDomains, $metricService) {
 
-                # get and save the domains
+                # save the domains
                 $domainSk->saveDomains($data['domains'] ?? []);
+
+                # save expiring domains
+                $expiringDomains->saveExpiringDomains($data['expiring_domains_next_30_days'] ?? []);
 
                 # Create and save DomainStatistic
                 $domainStatistic = new DomainStatistic([
@@ -83,15 +88,42 @@ class ApiController extends Controller
                     'longest_domain_name_length' => $data['longest_domain_name_length'] ?? null,
                     'avg_domain_name_length' => $data['avg_domain_name_length'] ?? null,
                 ]);
-                $domainStatistic->save();
 
                 # Process loads_info
-                if (isset($data['loads_info'], $data['loads_info']['latest_load'], $data['loads_info']['previous_load'])) {
-                    $crawlingPrevious = new Crawling($data['loads_info']['previous_load']);
-                    $crawlingPrevious->save();
-                    $crawlingLatest = new Crawling($data['loads_info']['latest_load']);
-                    $crawlingLatest->save();
+                if (isset($data['loads_info'])) {
+
+                    if (isset($data['loads_info']['latest_load'])) {
+                        $crawlingPrevious = new Crawling($data['loads_info']['previous_load']);
+                        $crawlingPrevious->save();
+                    }
+
+                    if (isset($data['loads_info']['previous_load'])) {
+                        $crawlingLatest = new Crawling($data['loads_info']['latest_load']);
+                        $crawlingLatest->save();
+                    }
+
+                    if (isset($data['loads_info']['number_of_domains_over_time'])) {
+                        $metricService->saveMetric($data['loads_info']['number_of_domains_over_time'], 'number_of_domains');
+                    }
+
+                    if (isset($data['loads_info']['crawling_duration_over_time'])) {
+                        $metricService->saveMetric($data['loads_info']['crawling_duration_over_time'], 'crawling_duration');
+                    }
+
+                    if (isset($data['loads_info']['download_speed_over_time'])) {
+                        $metricService->saveMetric($data['loads_info']['download_speed_over_time'], 'download_speed');
+                    }
+
+                    if (isset($data['loads_info']['crawling_average_duration_seconds'])) {
+                        $domainStatistic->crawling_average_duration_seconds = $data['loads_info']['crawling_average_duration_seconds'] ?? null;
+                    }
+
+                    if (isset($data['loads_info']['average_download_speed_bytes_per_second'])) {
+                        $domainStatistic->average_download_speed_bytes_per_second = $data['loads_info']['average_download_speed_bytes_per_second'] ?? null;
+                    }
                 }
+
+                $domainStatistic->save();
 
                 # Save market share and heatmap data
                 $stats->parseAndSaveMarketShareData($data['calendar_heatmap_by_day'] ?? [], CalendarHeatmapByDay::class, self::CHUNK_SIZE);
