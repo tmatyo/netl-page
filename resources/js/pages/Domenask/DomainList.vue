@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import Pagination from '@/components/Pagination.vue';
-import { DomainsType, PaginationType } from '@/types';
-defineProps<{ domains: PaginationType<DomainsType> }>();
+import { DomainListPropsType } from '@/types';
+defineProps<DomainListPropsType>();
 </script>
 
 <template>
     <AdminLayout>
-        <h1 class="font-size-3xl text-[var(--color-brand-500)]">Domain List</h1>
-        <h3 v-if="domains.data.length > 0" class="text-[var(--color-brand-500)]">{{ domains.data.length }} lines</h3>
+        <h1 class="font-size-3xl text-[var(--color-brand-500)]">Domain List <small class="text-gray-700">({{ domains.total }})</small></h1>
         <div class="my-3" v-if="domains">
             <Pagination
                 v-if="domains.last_page > 1"

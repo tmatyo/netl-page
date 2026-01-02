@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import Pagination from '@/components/Pagination.vue';
-import { PaginationType, RegistrarMarketShareType } from '@/types';
-defineProps<{ registrarsMarketShare: PaginationType<RegistrarMarketShareType> }>();
+import { RegistrarMarketSharePropsType } from '@/types';
+defineProps<RegistrarMarketSharePropsType>();
 </script>
 
 <template>
     <AdminLayout>
-        <h1 class="font-size-3xl text-[var(--color-brand-500)]">Registrar Marketshare</h1>
-        <h3 v-if="registrarsMarketShare.data.length > 0" class="text-[var(--color-brand-500)]">{{ registrarsMarketShare.data.length }} lines</h3>
+        <h1 class="font-size-3xl text-[var(--color-brand-500)]">Registrar Marketshare <small class="text-gray-700">({{ registrarsMarketShare.total }})</small></h1>
         <div class="my-3" v-if="registrarsMarketShare">
             <Pagination
                 v-if="registrarsMarketShare.last_page > 1"

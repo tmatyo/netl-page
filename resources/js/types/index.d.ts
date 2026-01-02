@@ -21,7 +21,7 @@ export interface User {
 export type MetricType = {
     value: number;
     date: string;
-}
+};
 
 export type DomainsType = {
     id: number;
@@ -80,7 +80,28 @@ export interface PaginationType<T> {
     prev_page_url: string;
     next_page_url: string;
     last_page_url: string;
+    total: number;
 }
+
+export type DomainListPropsType = {
+    domains: PaginationType<DomainsType>;
+    error: string | null;
+};
+
+export type OwnerMarketSharePropsType = {
+    ownersMarketShare: PaginationType<OwnerMarketShareType>;
+    error: string | null;
+};
+
+export type RegistrarMarketSharePropsType = {
+    registrarsMarketShare: PaginationType<RegistrarMarketShareType>;
+    error: string | null;
+};
+
+export type NameServerMarketSharePropsType = {
+    nameserverMarketShare: PaginationType<NameServerMarketShareType>;
+    error: string | null;
+};
 
 export type CrawlInfo = {
     id: number;

@@ -39,29 +39,69 @@ class DomainSkController extends Controller
 
     public function domainList()
     {
+        $domains = [];
+        $error = null;
+
+        try {
+            $domains = Domain::orderBy('id', 'desc')->paginate(20);
+        } catch (Exception $e) {
+            $error = $e->getMessage();
+        }
+
         return Inertia::render('Domenask/DomainList', [
-            'domains' => Domain::query()->paginate(20)
+            'domains' => $domains,
+            'error' => $error,
         ]);
     }
 
     public function ownersMarketshare()
     {
+        $owners = [];
+        $error = null;
+
+        try {
+            $owners = OwnerMarketShare::query()->orderBy('domain_count', 'desc')->paginate(20);
+        } catch (Exception $e) {
+            $error = $e->getMessage();
+        }
+
         return Inertia::render('Domenask/OwnersMarketshare', [
-            'ownersMarketShare' => OwnerMarketShare::query()->orderBy('domain_count', 'desc')->paginate(20)
+            'ownersMarketShare' => $owners,
+            'error' => $error
         ]);
     }
 
     public function registrarsMarketshare()
     {
+        $registrars = [];
+        $error = null;
+
+        try {
+            $registrars = RegistrarMarketShare::query()->orderBy('domain_count', 'desc')->paginate(20);
+        } catch (Exception $e) {
+            $error = $e->getMessage();
+        }
+
         return Inertia::render('Domenask/RegistrarsMarketshare', [
-            'registrarsMarketShare' => RegistrarMarketShare::query()->orderBy('domain_count', 'desc')->paginate(20)
+            'registrarsMarketShare' => $registrars,
+            'error' => $error
         ]);
     }
 
     public function nameserverMarketshare()
     {
+        $nameservers = [];
+        $error = null;
+
+        try {
+            $nameservers = NameserverMarketShare::query()->orderBy('count', 'desc')->paginate(20);
+        } catch (Exception $e) {
+            $error = $e->getMessage();
+        }
+
         return Inertia::render('Domenask/NameserverMarketshare', [
-            'nameserverMarketShare' => NameserverMarketShare::query()->orderBy('count', 'desc')->paginate(20)
+            'nameserverMarketShare' => $nameservers,
+            'error' => $error
         ]);
     }
 }

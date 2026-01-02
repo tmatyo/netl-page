@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import Pagination from '@/components/Pagination.vue';
-import { NameServerMarketShareType, PaginationType } from '@/types';
-defineProps<{ nameserverMarketShare: PaginationType<NameServerMarketShareType> }>();
+import { NameServerMarketSharePropsType } from '@/types';
+defineProps<NameServerMarketSharePropsType>();
 </script>
 
 <template>
     <AdminLayout>
-        <h1 class="font-size-3xl text-[var(--color-brand-500)]">Name Server Marketshare</h1>
-        <h3 v-if="nameserverMarketShare.data.length > 0" class="text-[var(--color-brand-500)]">{{ nameserverMarketShare.data.length }} lines</h3>
+        <h1 class="font-size-3xl text-[var(--color-brand-500)]">Name Server Marketshare <small class="text-gray-700">({{ nameserverMarketShare.total }})</small></h1>
         <div class="my-3" v-if="nameserverMarketShare">
             <Pagination
                 v-if="nameserverMarketShare.last_page > 1"
@@ -28,7 +27,6 @@ defineProps<{ nameserverMarketShare: PaginationType<NameServerMarketShareType> }
                             <th scope="col" class="px-6 py-3">#</th>
                             <th scope="col" class="px-6 py-3">Owner</th>
                             <th scope="col" class="px-6 py-3">Domain count</th>
-                            <th scope="col" class="px-6 py-3">Percentage</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,9 +43,6 @@ defineProps<{ nameserverMarketShare: PaginationType<NameServerMarketShareType> }
                             </td>
                             <td class="px-6 py-4">
                                 {{ d.count }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ d.percentage }}
                             </td>
                         </tr>
                     </tbody>
