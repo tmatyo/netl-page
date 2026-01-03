@@ -1,16 +1,33 @@
 <script setup lang="ts">
+import NothingToSeeHere from '@/components/common/NothingToSeeHere.vue';
+import SearchBar from '@/components/FormElements/SearchBar.vue';
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import Pagination from '@/components/Pagination.vue';
 import { DomainListPropsType } from '@/types';
-defineProps<DomainListPropsType>();
+import { router } from '@inertiajs/vue3';
+
+const props = defineProps<DomainListPropsType>();
+
+const search = (searchText: string) => {
+    router.get(
+        window.location.pathname,
+        { search: searchText },
+        {
+            preserveState: true,
+            replace: true,
+        },
+    );
+};
 </script>
 
 <template>
     <AdminLayout>
-        <h1 class="font-size-3xl text-[var(--color-brand-500)]">Domain List <small class="text-gray-700">({{ domains.total }})</small></h1>
-        <div class="my-3" v-if="domains">
+        <h1 class="font-size-3xl text-[var(--color-brand-500)]">
+            Domain List <small class="text-gray-700">({{ domains.total }})</small>
+        </h1>
+        <SearchBar :searchTerm="searchQuery ?? ''" @search="(searchQuery: string) => search(searchQuery)" />
+        <div class="my-3" v-if="domains.data.length > 0">
             <Pagination
-                v-if="domains.last_page > 1"
                 :data="{ current_page: domains.current_page, last_page: domains.last_page }"
                 :links="{
                     first_page_url: domains.first_page_url,
@@ -64,7 +81,6 @@ defineProps<DomainListPropsType>();
                 </table>
             </div>
             <Pagination
-                v-if="domains.last_page > 1"
                 :data="{ current_page: domains.current_page, last_page: domains.last_page }"
                 :links="{
                     first_page_url: domains.first_page_url,
@@ -75,6 +91,6 @@ defineProps<DomainListPropsType>();
                 class="mt-4"
             />
         </div>
-        <div v-else class="p-4 text-yellow-500">Loading...</div>
+        <NothingToSeeHere v-else />
     </AdminLayout>
 </template>

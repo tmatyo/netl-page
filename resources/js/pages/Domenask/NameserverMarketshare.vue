@@ -1,16 +1,31 @@
 <script setup lang="ts">
+import NothingToSeeHere from '@/components/common/NothingToSeeHere.vue';
+import SearchBar from '@/components/FormElements/SearchBar.vue';
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import Pagination from '@/components/Pagination.vue';
 import { NameServerMarketSharePropsType } from '@/types';
+import { router } from '@inertiajs/vue3';
 defineProps<NameServerMarketSharePropsType>();
+const search = (searchText: string) => {
+    router.get(
+        window.location.pathname,
+        { search: searchText },
+        {
+            preserveState: true,
+            replace: true,
+        },
+    );
+};
 </script>
 
 <template>
     <AdminLayout>
-        <h1 class="font-size-3xl text-[var(--color-brand-500)]">Name Server Marketshare <small class="text-gray-700">({{ nameserverMarketShare.total }})</small></h1>
-        <div class="my-3" v-if="nameserverMarketShare">
+        <h1 class="font-size-3xl text-[var(--color-brand-500)]">
+            Name Server Marketshare <small class="text-gray-700">({{ nameserverMarketShare.total }})</small>
+        </h1>
+        <SearchBar :searchTerm="searchQuery ?? ''" @search="(searchQuery: string) => search(searchQuery)" />
+        <div class="my-3" v-if="nameserverMarketShare.data.length > 0">
             <Pagination
-                v-if="nameserverMarketShare.last_page > 1"
                 :data="{ current_page: nameserverMarketShare.current_page, last_page: nameserverMarketShare.last_page }"
                 :links="{
                     first_page_url: nameserverMarketShare.first_page_url,
@@ -49,7 +64,6 @@ defineProps<NameServerMarketSharePropsType>();
                 </table>
             </div>
             <Pagination
-                v-if="nameserverMarketShare.last_page > 1"
                 :data="{ current_page: nameserverMarketShare.current_page, last_page: nameserverMarketShare.last_page }"
                 :links="{
                     first_page_url: nameserverMarketShare.first_page_url,
@@ -60,6 +74,6 @@ defineProps<NameServerMarketSharePropsType>();
                 class="mt-4"
             />
         </div>
-        <div v-else class="p-4 text-yellow-500">Loading...</div>
+        <NothingToSeeHere v-else />
     </AdminLayout>
 </template>

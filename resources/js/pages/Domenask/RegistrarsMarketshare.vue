@@ -1,16 +1,31 @@
 <script setup lang="ts">
+import NothingToSeeHere from '@/components/common/NothingToSeeHere.vue';
+import SearchBar from '@/components/FormElements/SearchBar.vue';
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import Pagination from '@/components/Pagination.vue';
 import { RegistrarMarketSharePropsType } from '@/types';
+import { router } from '@inertiajs/vue3';
 defineProps<RegistrarMarketSharePropsType>();
+const search = (searchText: string) => {
+    router.get(
+        window.location.pathname,
+        { search: searchText },
+        {
+            preserveState: true,
+            replace: true,
+        },
+    );
+};
 </script>
 
 <template>
     <AdminLayout>
-        <h1 class="font-size-3xl text-[var(--color-brand-500)]">Registrar Marketshare <small class="text-gray-700">({{ registrarsMarketShare.total }})</small></h1>
-        <div class="my-3" v-if="registrarsMarketShare">
+        <h1 class="font-size-3xl text-[var(--color-brand-500)]">
+            Registrar Marketshare <small class="text-gray-700">({{ registrarsMarketShare.total }})</small>
+        </h1>
+        <SearchBar :searchTerm="searchQuery ?? ''" @search="(searchQuery: string) => search(searchQuery)" />
+        <div class="my-3" v-if="registrarsMarketShare.data.length > 0">
             <Pagination
-                v-if="registrarsMarketShare.last_page > 1"
                 :data="{ current_page: registrarsMarketShare.current_page, last_page: registrarsMarketShare.last_page }"
                 :links="{
                     first_page_url: registrarsMarketShare.first_page_url,
@@ -53,7 +68,6 @@ defineProps<RegistrarMarketSharePropsType>();
                 </table>
             </div>
             <Pagination
-                v-if="registrarsMarketShare.last_page > 1"
                 :data="{ current_page: registrarsMarketShare.current_page, last_page: registrarsMarketShare.last_page }"
                 :links="{
                     first_page_url: registrarsMarketShare.first_page_url,
@@ -64,6 +78,6 @@ defineProps<RegistrarMarketSharePropsType>();
                 class="mt-4"
             />
         </div>
-        <div v-else class="p-4 text-yellow-500">Loading...</div>
+        <NothingToSeeHere v-else />
     </AdminLayout>
 </template>

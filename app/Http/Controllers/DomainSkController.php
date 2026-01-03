@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use Illuminate\Http\Request;
 use App\Models\CalendarHeatmapByDay;
 use App\Models\Crawling;
 use App\Models\Domain;
@@ -37,70 +38,94 @@ class DomainSkController extends Controller
         ]);
     }
 
-    public function domainList()
+    public function domainList(Request $request)
     {
         $domains = [];
         $error = null;
+        $query = Domain::query();
+
+        if ($request->filled('search')) {
+            $query->where('domain', 'like', '%' . $request->search . '%');
+        }
 
         try {
-            $domains = Domain::orderBy('id', 'desc')->paginate(20);
+            $domains = $query->orderBy('id', 'asc')->paginate(20)->withQueryString();
         } catch (Exception $e) {
             $error = $e->getMessage();
         }
 
         return Inertia::render('Domenask/DomainList', [
             'domains' => $domains,
+            'searchQuery' => $request->filled('search') ? $request->search : '',
             'error' => $error,
         ]);
     }
 
-    public function ownersMarketshare()
+    public function ownersMarketshare(Request $request)
     {
         $owners = [];
         $error = null;
+        $query = OwnerMarketShare::query();
+
+        if ($request->filled('search')) {
+            $query->where('owner', 'like', '%' . $request->search . '%');
+        }
 
         try {
-            $owners = OwnerMarketShare::query()->orderBy('domain_count', 'desc')->paginate(20);
+            $owners = $query->orderBy('domain_count', 'desc')->paginate(20)->withQueryString();
         } catch (Exception $e) {
             $error = $e->getMessage();
         }
 
         return Inertia::render('Domenask/OwnersMarketshare', [
             'ownersMarketShare' => $owners,
+            'searchQuery' => $request->filled('search') ? $request->search : '',
             'error' => $error
         ]);
     }
 
-    public function registrarsMarketshare()
+    public function registrarsMarketshare(Request $request)
     {
         $registrars = [];
         $error = null;
+        $query = RegistrarMarketShare::query();
+
+        if ($request->filled('search')) {
+            $query->where('registrar', 'like', '%' . $request->search . '%');
+        }
 
         try {
-            $registrars = RegistrarMarketShare::query()->orderBy('domain_count', 'desc')->paginate(20);
+            $registrars = $query->orderBy('domain_count', 'desc')->paginate(20)->withQueryString();
         } catch (Exception $e) {
             $error = $e->getMessage();
         }
 
         return Inertia::render('Domenask/RegistrarsMarketshare', [
             'registrarsMarketShare' => $registrars,
+            'searchQuery' => $request->filled('search') ? $request->search : '',
             'error' => $error
         ]);
     }
 
-    public function nameserverMarketshare()
+    public function nameserverMarketshare(Request $request)
     {
         $nameservers = [];
         $error = null;
+        $query = NameserverMarketShare::query();
+
+        if ($request->filled('search')) {
+            $query->where('ns', 'like', '%' . $request->search . '%');
+        }
 
         try {
-            $nameservers = NameserverMarketShare::query()->orderBy('count', 'desc')->paginate(20);
+            $nameservers = $query->orderBy('count', 'desc')->paginate(20)->withQueryString();
         } catch (Exception $e) {
             $error = $e->getMessage();
         }
 
         return Inertia::render('Domenask/NameserverMarketshare', [
             'nameserverMarketShare' => $nameservers,
+            'searchQuery' => $request->filled('search') ? $request->search : '',
             'error' => $error
         ]);
     }

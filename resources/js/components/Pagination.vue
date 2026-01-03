@@ -14,7 +14,7 @@ defineProps({
 <template>
     <div class="flex items-center justify-center gap-2 py-4">
         <ReactiveLink
-            :disabled="!links.first_page_url || parseInt(links.first_page_url?.split('?page=')[1]) === data.current_page"
+            :disabled="!links.first_page_url || parseInt(links.first_page_url?.split('?page=')[1]) === data.current_page || links.last_page_url === links.first_page_url"
             :link="links.first_page_url ?? '#'"
             label="First"
         />
@@ -30,7 +30,7 @@ defineProps({
             label="Next"
         />
         <ReactiveLink
-            :disabled="!links.last_page_url || parseInt(links.last_page_url?.split('?page=')[1]) === data.current_page"
+            :disabled="!links.last_page_url || parseInt(links.last_page_url?.split('?page=')[1]) === data.current_page || links.last_page_url === links.first_page_url"
             :link="links.last_page_url ?? '#'"
             label="Last"
         />

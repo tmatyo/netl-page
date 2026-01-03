@@ -86,21 +86,25 @@ export interface PaginationType<T> {
 export type DomainListPropsType = {
     domains: PaginationType<DomainsType>;
     error: string | null;
+    searchQuery?: string;
 };
 
 export type OwnerMarketSharePropsType = {
     ownersMarketShare: PaginationType<OwnerMarketShareType>;
     error: string | null;
+    searchQuery?: string;
 };
 
 export type RegistrarMarketSharePropsType = {
     registrarsMarketShare: PaginationType<RegistrarMarketShareType>;
     error: string | null;
+    searchQuery?: string;
 };
 
 export type NameServerMarketSharePropsType = {
     nameserverMarketShare: PaginationType<NameServerMarketShareType>;
     error: string | null;
+    searchQuery?: string;
 };
 
 export type CrawlInfo = {

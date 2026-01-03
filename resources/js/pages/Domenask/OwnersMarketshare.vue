@@ -1,16 +1,32 @@
 <script setup lang="ts">
+import SearchBar from '@/components/FormElements/SearchBar.vue';
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import Pagination from '@/components/Pagination.vue';
+import NothingToSeeHere from '@/components/common/NothingToSeeHere.vue';
 import { OwnerMarketSharePropsType } from '@/types';
+import { router } from '@inertiajs/vue3';
 defineProps<OwnerMarketSharePropsType>();
+
+const search = (searchText: string) => {
+    router.get(
+        window.location.pathname,
+        { search: searchText },
+        {
+            preserveState: true,
+            replace: true,
+        },
+    );
+};
 </script>
 
 <template>
     <AdminLayout>
-        <h1 class="font-size-3xl text-[var(--color-brand-500)]">Owner Marketshare <small class="text-gray-700">({{ ownersMarketShare.total }})</small></h1>
-        <div class="my-3" v-if="ownersMarketShare">
+        <h1 class="font-size-3xl text-[var(--color-brand-500)]">
+            Owner Marketshare <small class="text-gray-700">({{ ownersMarketShare.total }})</small>
+        </h1>
+        <SearchBar :searchTerm="searchQuery ?? ''" @search="(searchQuery: string) => search(searchQuery)" />
+        <div class="my-3" v-if="ownersMarketShare.data.length > 0">
             <Pagination
-                v-if="ownersMarketShare.last_page > 1"
                 :data="{ current_page: ownersMarketShare.current_page, last_page: ownersMarketShare.last_page }"
                 :links="{
                     first_page_url: ownersMarketShare.first_page_url,
@@ -53,7 +69,6 @@ defineProps<OwnerMarketSharePropsType>();
                 </table>
             </div>
             <Pagination
-                v-if="ownersMarketShare.last_page > 1"
                 :data="{ current_page: ownersMarketShare.current_page, last_page: ownersMarketShare.last_page }"
                 :links="{
                     first_page_url: ownersMarketShare.first_page_url,
@@ -64,6 +79,6 @@ defineProps<OwnerMarketSharePropsType>();
                 class="mt-4"
             />
         </div>
-        <div v-else class="p-4 text-yellow-500">Loading...</div>
+        <NothingToSeeHere v-else />
     </AdminLayout>
 </template>
