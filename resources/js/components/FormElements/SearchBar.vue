@@ -23,7 +23,7 @@ const onSearch = (event: Event) => {
     <form @submit="onSearch" class="my-4">
         <label for="search" class="sr-only mb-2 text-sm font-medium text-gray-900 dark:text-white">Search</label>
         <div class="relative">
-            <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3">
+            <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3 dark:text-gray-500">
                 <svg
                     class="text-body h-4 w-4"
                     aria-hidden="true"
@@ -40,9 +40,10 @@ const onSearch = (event: Event) => {
                 v-model="searchTerm"
                 type="search"
                 id="search"
-                class="bg-neutral-secondary-medium border-default-medium text-heading rounded-base focus:ring-brand focus:border-brand placeholder:text-body block w-full border p-3 ps-9 text-sm shadow-xs"
+                class="border-default-medium text-heading rounded border-gray-300 dark:border-gray-800 focus:ring-brand focus:border-brand placeholder:text-body block w-full border p-3 ps-9 text-sm shadow-xs text-gray-800 dark:text-gray-300"
                 placeholder="Search"
                 minlength="3"
+                maxlength="256"
                 required
             />
             <button

@@ -23,7 +23,7 @@ defineProps({
             :link="links.prev_page_url ?? '#'"
             label="Previous"
         />
-        <span class="text-sm">{{ data.current_page }} of {{ data.last_page }}</span>
+        <span class="text-sm text-gray-700 dark:text-gray-400">{{ data.current_page }} of {{ data.last_page }}</span>
         <ReactiveLink
             :disabled="!links.next_page_url"
             :link="links.next_page_url ?? '#'"
