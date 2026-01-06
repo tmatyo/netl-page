@@ -31,6 +31,7 @@ const props = defineProps<{
     <AdminLayout>
         <div class="grid grid-cols-12 gap-4 md:gap-6" v-if="props">
             <div class="col-span-12 space-y-6 xl:col-span-12">
+                <h1 class="font-size-3xl text-[var(--color-brand-500)]">Domain statistics overview</h1>
                 <CrawlingInfo
                     :latest="latestCrawling"
                     :previous="previousCrawling"
@@ -39,6 +40,7 @@ const props = defineProps<{
                     :avgDomainLength="domainStatistics.avg_domain_name_length"
                     :longestDomainLength="domainStatistics.longest_domain_name_length"
                 />
+                <h1 class="font-size-2xl col-span-12 text-[var(--color-brand-500)]">Domain statistics over time</h1>
                 <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 xl:gap-6">
                     <LineChart
                         title="Domain count over time"
@@ -62,9 +64,11 @@ const props = defineProps<{
                         type="bar"
                     />
                 </div>
+                <h1 class="font-size-2xl col-span-12 text-[var(--color-brand-500)]">Expiring domains heatmap</h1>
                 <div class="grid grid-cols-1 gap-4 xl:grid-cols-1 xl:gap-6">
                     <CalendarHeatMap title="Number of expiring domains (per day) in the next year" :data="calendarHeatmapByDay" />
                 </div>
+                <h1 class="font-size-2xl col-span-12 text-[var(--color-brand-500)]">Marketshare statistics</h1>
                 <div class="grid grid-cols-1 gap-4 xl:grid-cols-3 xl:gap-6">
                     <div class="grid grid-rows-1 gap-4 xl:grid-rows-2 xl:gap-6">
                         <PieChart

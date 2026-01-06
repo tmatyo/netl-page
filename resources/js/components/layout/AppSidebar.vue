@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import {  } from '@/routes'
 import { useSidebar } from '@/composables/useSidebar';
+import {} from '@/routes';
 import { Link } from '@inertiajs/vue3';
-import { ChevronDownIcon, GridIcon, HorizontalDots } from '../../icons';
+import { computed } from 'vue';
+import { ChevronDownIcon, GridIcon, HorizontalDots, ListIcon } from '../../icons';
 import SidebarWidget from './SidebarWidget.vue';
 
 const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar();
@@ -25,17 +25,11 @@ const menuGroups: MenuGroupType[] = [
     {
         title: 'Menu',
         items: [
-            {
-                icon: GridIcon,
-                name: 'Domain SK',
-                subItems: [
-                    { name: 'Statistics', path: '/domainsk/', pro: false },
-                    { name: 'Domains', path: '/domainsk/domain-list', pro: false },
-                    { name: 'Owners', path: '/domainsk/owners-marketshare', pro: false },
-                    { name: 'Registrars', path: '/domainsk/registrars-marketshare', pro: false },
-                    { name: 'Nameservers', path: '/domainsk/nameserver-marketshare', pro: false },
-                ],
-            },
+            { icon: GridIcon, name: 'Statistics', path: '/domainsk/' },
+            { icon: ListIcon, name: 'Domains', path: '/domainsk/domain-list' },
+            { icon: ListIcon, name: 'Owners', path: '/domainsk/owners-marketshare' },
+            { icon: ListIcon, name: 'Registrars', path: '/domainsk/registrars-marketshare' },
+            { icon: ListIcon, name: 'Nameservers', path: '/domainsk/nameserver-marketshare' },
         ],
     },
 ];
@@ -74,7 +68,7 @@ const endTransition = (el: Element) => {
 <template>
     <aside
         :class="[
-            'fixed top-0 left-0 z-99999 mt-16 flex h-screen flex-col border-r border-gray-200 border-dashed bg-white px-5 text-gray-900 transition-all duration-300 ease-in-out lg:mt-0 dark:border-gray-800 dark:bg-gray-900',
+            'fixed top-0 left-0 z-99999 mt-16 flex h-screen flex-col border-r border-dashed border-gray-200 bg-white px-5 text-gray-900 transition-all duration-300 ease-in-out lg:mt-0 dark:border-gray-800 dark:bg-gray-900',
             {
                 'lg:w-[290px]': isExpanded || isMobileOpen || isHovered,
                 'lg:w-[90px]': !isExpanded && !isHovered,

@@ -21,6 +21,7 @@ const series = ref(props.data);
 
 const chartOptions = ref({
     labels: props.labels,
+    stroke: { width: 0 },
 });
 </script>
 <template>
