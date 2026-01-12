@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen xl:flex">
-    <app-sidebar />
+    <app-sidebar/>
     <Backdrop />
     <div
       class="flex-1 transition-all duration-300 ease-in-out"
@@ -13,7 +13,7 @@
       <!-- Footer -->
       <footer class="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6 pt-0">
         <p class="text-sm text-center text-gray-500 dark:text-gray-400">
-          Webdesign heavily inspired by 
+          {{ $t('heavily_inspired_by') }} 
           <a 
             href="https://tailadmin.com/" 
             target="_blank" 

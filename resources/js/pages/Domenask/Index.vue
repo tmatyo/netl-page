@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import BarChart from '@/components/ecommerce/BarChart.vue';
 import CalendarHeatMap from '@/components/ecommerce/CalendarHeatMap.vue';
 import LineChart from '@/components/ecommerce/LineChart.vue';
 import PieChart from '@/components/ecommerce/PieChart.vue';
@@ -13,6 +14,7 @@ import {
     RegistrarMarketShareType,
 } from '@/types';
 import CrawlingInfo from './CrawlingInfo.vue';
+import DomainInfo from './DomainInfo.vue';
 
 const props = defineProps<{
     latestCrawling: CrawlInfo;
@@ -26,107 +28,107 @@ const props = defineProps<{
     registrarsMarketShare: RegistrarMarketShareType[];
     nameserverMarketShare: NameServerMarketShareType[];
 }>();
+
+const crawlingInfoKeyword: string = 'showall';
+const queryParam: string = window.location.search;
 </script>
 <template>
     <AdminLayout>
-        <div class="grid grid-cols-12 gap-4 md:gap-6" v-if="props">
-            <div class="col-span-12 space-y-6 xl:col-span-12">
-                <h1 class="font-size-3xl text-[var(--color-brand-500)]">Domain statistics overview</h1>
+        <div v-if="props">
+            <h1 class="font-size-3xl text-[var(--color-brand-500)]">{{ $t('domain_statistics') }}</h1>
+            <div class="mb-6 grid grid-cols-2 space-y-6 xl:grid-cols-4 xl:space-y-0 xl:space-x-6">
+                <DomainInfo
+                    class="col-span-2"
+                    :latest="latestCrawling"
+                    :previous="previousCrawling"
+                    :avgDomainLength="domainStatistics.avg_domain_name_length"
+                    :longestDomainLength="domainStatistics.longest_domain_name_length"
+                />
+                <LineChart
+                    class="col-span-2"
+                    :title="$t('domain_count_over_time')"
+                    :data="numberOfDomainsMetric.map((item: MetricType) => item.value)"
+                    :dataTitle="$t('domain_count')"
+                    :labels="numberOfDomainsMetric.map((item: MetricType) => item.date)"
+                />
+            </div>
+
+            <h1 v-if="queryParam.includes(crawlingInfoKeyword)" class="font-size-2xl col-span-12 text-[var(--color-brand-500)]">
+                {{ $t('crawling_info') }}
+            </h1>
+            <div v-if="queryParam.includes(crawlingInfoKeyword)" class="grid grid-cols-1 space-y-6">
                 <CrawlingInfo
+                    class="col-span-3"
                     :latest="latestCrawling"
                     :previous="previousCrawling"
                     :avgSpeed="domainStatistics.average_download_speed_bytes_per_second"
                     :avgDuration="domainStatistics.crawling_average_duration_seconds"
-                    :avgDomainLength="domainStatistics.avg_domain_name_length"
-                    :longestDomainLength="domainStatistics.longest_domain_name_length"
                 />
-                <h1 class="font-size-2xl col-span-12 text-[var(--color-brand-500)]">Domain statistics over time</h1>
-                <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 xl:gap-6">
+                <div class="mb-6 grid grid-cols-1 space-y-6 xl:grid-cols-2 xl:space-y-0 xl:space-x-6">
                     <LineChart
-                        title="Domain count over time"
-                        :data="numberOfDomainsMetric.map((item: MetricType) => item.value)"
-                        dataTitle="Number of domains"
-                        :labels="numberOfDomainsMetric.map((item: MetricType) => item.date)"
-                        type="bar"
-                    />
-                    <LineChart
-                        title="Crawling duration over time (seconds)"
+                        :title="$t('crawling_duration_over_time')"
                         :data="crawlingDurationMetric.map((item: MetricType) => parseInt(item.value.toFixed(4)))"
-                        dataTitle="Crawling duration (s)"
+                        :dataTitle="$t('crawling_duration_sec')"
                         :labels="crawlingDurationMetric.map((item: MetricType) => item.date)"
-                        type="bar"
                     />
                     <LineChart
-                        title="Download speed over time (MB/s)"
+                        :title="$t('download_speed_over_time')"
                         :data="downloadSpeedMetric.map((item: MetricType) => Math.round(item.value / 1024 / 1024))"
-                        dataTitle="Download speed (MB/s)"
+                        :dataTitle="$t('download_speed_mbps')"
                         :labels="downloadSpeedMetric.map((item: MetricType) => item.date)"
-                        type="bar"
                     />
                 </div>
-                <h1 class="font-size-2xl col-span-12 text-[var(--color-brand-500)]">Expiring domains heatmap</h1>
-                <div class="grid grid-cols-1 gap-4 xl:grid-cols-1 xl:gap-6">
-                    <CalendarHeatMap title="Number of expiring domains (per day) in the next year" :data="calendarHeatmapByDay" />
-                </div>
-                <h1 class="font-size-2xl col-span-12 text-[var(--color-brand-500)]">Marketshare statistics</h1>
-                <div class="grid grid-cols-1 gap-4 xl:grid-cols-3 xl:gap-6">
-                    <div class="grid grid-rows-1 gap-4 xl:grid-rows-2 xl:gap-6">
-                        <PieChart
-                            title="Domain owner market share"
-                            :data="ownersMarketShare.slice(0, 19).map((item: OwnerMarketShareType) => item.domain_count)"
-                            dataTitle="Number of domains"
-                            :labels="ownersMarketShare.slice(0, 19).map((item: OwnerMarketShareType) => item.owner)"
-                        />
-                        <LineChart
-                            title="Domain owner market share"
-                            :data="ownersMarketShare.slice(0, 19).map((item: OwnerMarketShareType) => item.domain_count)"
-                            dataTitle="Number of domains"
-                            :labels="ownersMarketShare.slice(0, 19).map((item: OwnerMarketShareType) => item.owner)"
-                            type="bar"
-                        />
-                    </div>
-                    <div class="grid grid-rows-1 gap-4 xl:grid-rows-2 xl:gap-6">
-                        <PieChart
-                            title="Domain registrar market share"
-                            :data="registrarsMarketShare.slice(0, 19).map((item: RegistrarMarketShareType) => item.domain_count)"
-                            dataTitle="Number of domains"
-                            :labels="registrarsMarketShare.slice(0, 19).map((item: RegistrarMarketShareType) => item.registrar)"
-                        />
-                        <LineChart
-                            title="Domain registrar market share"
-                            :data="registrarsMarketShare.slice(0, 19).map((item: RegistrarMarketShareType) => item.domain_count)"
-                            dataTitle="Number of domains"
-                            :labels="registrarsMarketShare.slice(0, 19).map((item: RegistrarMarketShareType) => item.registrar)"
-                            type="bar"
-                        />
-                    </div>
-                    <div class="grid grid-rows-1 gap-4 xl:grid-rows-2 xl:gap-6">
-                        <PieChart
-                            title="Name server market share"
-                            :data="nameserverMarketShare.slice(0, 19).map((item: NameServerMarketShareType) => item.count)"
-                            dataTitle="Number of domains"
-                            :labels="nameserverMarketShare.slice(0, 19).map((item: NameServerMarketShareType) => item.ns)"
-                        />
-                        <LineChart
-                            title="Name server market share"
-                            :data="nameserverMarketShare.slice(0, 19).map((item: NameServerMarketShareType) => item.count)"
-                            dataTitle="Number of domains"
-                            :labels="nameserverMarketShare.slice(0, 19).map((item: NameServerMarketShareType) => item.ns)"
-                            type="bar"
-                        />
-                    </div>
-                </div>
-            </div>
-            <div class="col-span-12 xl:col-span-12">
-                <!-- <MonthlyTarget /> -->
             </div>
 
-            <div class="col-span-12">
-                <!-- <StatisticsChart /> -->
+            <h1 class="font-size-2xl col-span-12 text-[var(--color-brand-500)]">{{ $t('marketshare_data') }}</h1>
+            <div class="mb-6 grid grid-cols-1 gap-4 xl:grid-cols-3 xl:gap-6">
+                <div class="grid grid-rows-1 gap-4 xl:grid-rows-2 xl:gap-6">
+                    <PieChart
+                        :title="$t('owner_marketshare')"
+                        :data="ownersMarketShare.slice(0, 19).map((item: OwnerMarketShareType) => item.domain_count)"
+                        :dataTitle="$t('domain_count')"
+                        :labels="ownersMarketShare.slice(0, 19).map((item: OwnerMarketShareType) => item.owner)"
+                    />
+                    <BarChart
+                        :title="$t('owner_marketshare')"
+                        :data="ownersMarketShare.slice(0, 19).map((item: OwnerMarketShareType) => item.domain_count)"
+                        :dataTitle="$t('domain_count')"
+                        :labels="ownersMarketShare.slice(0, 19).map((item: OwnerMarketShareType) => item.owner)"
+                    />
+                </div>
+                <div class="grid grid-rows-1 gap-4 xl:grid-rows-2 xl:gap-6">
+                    <PieChart
+                        :title="$t('registrar_marketshare')"
+                        :data="registrarsMarketShare.slice(0, 19).map((item: RegistrarMarketShareType) => item.domain_count)"
+                        :dataTitle="$t('domain_count')"
+                        :labels="registrarsMarketShare.slice(0, 19).map((item: RegistrarMarketShareType) => item.registrar)"
+                    />
+                    <BarChart
+                        :title="$t('registrar_marketshare')"
+                        :data="registrarsMarketShare.slice(0, 19).map((item: RegistrarMarketShareType) => item.domain_count)"
+                        :dataTitle="$t('domain_count')"
+                        :labels="registrarsMarketShare.slice(0, 19).map((item: RegistrarMarketShareType) => item.registrar)"
+                    />
+                </div>
+                <div class="grid grid-rows-1 gap-4 xl:grid-rows-2 xl:gap-6">
+                    <PieChart
+                        :title="$t('ns_marketshare')"
+                        :data="nameserverMarketShare.slice(0, 19).map((item: NameServerMarketShareType) => item.count)"
+                        :dataTitle="$t('domain_count')"
+                        :labels="nameserverMarketShare.slice(0, 19).map((item: NameServerMarketShareType) => item.ns)"
+                    />
+                    <BarChart
+                        :title="$t('ns_marketshare')"
+                        :data="nameserverMarketShare.slice(0, 19).map((item: NameServerMarketShareType) => item.count)"
+                        :dataTitle="$t('domain_count')"
+                        :labels="nameserverMarketShare.slice(0, 19).map((item: NameServerMarketShareType) => item.ns)"
+                    />
+                </div>
             </div>
 
-            <div class="col-span-12 xl:col-span-12">
-                <!-- <RecentOrders /> -->
+            <h1 class="font-size-2xl col-span-12 text-[var(--color-brand-500)]">{{ $t('expiring_domains_heatmap') }}</h1>
+            <div class="grid grid-cols-1 gap-4 xl:grid-cols-1 xl:gap-6">
+                <CalendarHeatMap :title="$t('expiring_domains_count')" :data="calendarHeatmapByDay" :months="$t('months')" :levels="$t('levels')"/>
             </div>
         </div>
     </AdminLayout>

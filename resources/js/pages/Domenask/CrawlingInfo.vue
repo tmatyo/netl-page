@@ -7,54 +7,42 @@ interface Props {
     previous: CrawlInfo;
     avgSpeed: number;
     avgDuration: number;
-    avgDomainLength: number;
-    longestDomainLength: number;
 }
-const props = defineProps<Props>();
-console.log(props);
+defineProps<Props>();
 
 const getPercentage = (latest: number, previous: number): number => {
     const change: number = ((latest - previous) / previous) * 100;
     return previous !== 0 ? Number(change.toFixed(2)) : previous;
 };
 
-const userLocale: string = navigator.languages?.[0] || navigator.language || 'sk-SK';
 </script>
 <template>
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-6 xl:grid-cols-5">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-6 xl:grid-cols-4">
         <IndividualMetric
-            title="Number of domains"
-            :value="latest.domain_count"
-            :percentage="getPercentage(latest.domain_count, previous.domain_count)"
-        />
-        <IndividualMetric title="Average domain name length" :value="avgDomainLength" suffix="char" />
-        <IndividualMetric title="Longest domain name length" :value="longestDomainLength" suffix="char" />
-        <IndividualMetric
-            title="File size"
+            :title="$t('file_size')"
             :value="(latest.file_size / 1024 / 1024).toFixed(2)"
             suffix="MB"
             :percentage="getPercentage(latest.file_size, previous.file_size)"
         />
         <IndividualMetric
-            title="Crawling duration"
+            :title="$t('crawling_duration')"
             :value="latest.crawling_duration.toFixed(4)"
             suffix="s"
             :percentage="getPercentage(latest.crawling_duration, previous.crawling_duration)"
         />
-        <IndividualMetric title="Average crawling duration" :value="avgDuration.toFixed(4)" suffix="s" />
+        <IndividualMetric :title="$t('avg_crawling_duration')" :value="avgDuration.toFixed(4)" suffix="s" />
         <IndividualMetric
-            title="Download duration"
+            :title="$t('download_duration')"
             :value="latest.download_duration.toFixed(4)"
             suffix="s"
             :percentage="getPercentage(latest.download_duration, previous.download_duration)"
         />
         <IndividualMetric
-            title="Download speed"
+            :title="$t('download_speed')"
             :value="Math.round(latest.avg_speed_in_bytes_per_sec / 1024 / 1024)"
             suffix="MB/s"
             :percentage="getPercentage(latest.avg_speed_in_bytes_per_sec, previous.avg_speed_in_bytes_per_sec)"
         />
-        <IndividualMetric title="Average download speed" :value="Math.round(avgSpeed / 1024 / 1024)" suffix="MB/s" />
-        <IndividualMetric title="Data valid as of" :value="new Date(latest.time_generated).toLocaleString(userLocale)" />
+        <IndividualMetric :title="$t('avg_download_speed')" :value="Math.round(avgSpeed / 1024 / 1024)" suffix="MB/s" />
     </div>
 </template>

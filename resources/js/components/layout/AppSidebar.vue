@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useSidebar } from '@/composables/useSidebar';
-import {} from '@/routes';
 import { Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import { t as $t } from '../../helpers/i18n';
 import { ChevronDownIcon, GridIcon, HorizontalDots, ListIcon } from '../../icons';
 import SidebarWidget from './SidebarWidget.vue';
 
@@ -21,18 +21,18 @@ type MenuGroupType = {
         }>;
     }>;
 };
-const menuGroups: MenuGroupType[] = [
+const menuGroups = computed<MenuGroupType[]>(() => [
     {
-        title: 'Menu',
+        title: $t('menu'),
         items: [
-            { icon: GridIcon, name: 'Statistics', path: '/domainsk/' },
-            { icon: ListIcon, name: 'Domains', path: '/domainsk/domain-list' },
-            { icon: ListIcon, name: 'Owners', path: '/domainsk/owners-marketshare' },
-            { icon: ListIcon, name: 'Registrars', path: '/domainsk/registrars-marketshare' },
-            { icon: ListIcon, name: 'Nameservers', path: '/domainsk/nameserver-marketshare' },
+            { icon: GridIcon, name: $t('statistics'), path: '/domainsk/' },
+            { icon: ListIcon, name: $t('domains'), path: '/domainsk/domain-list' },
+            { icon: ListIcon, name: $t('owners'), path: '/domainsk/owners-marketshare' },
+            { icon: ListIcon, name: $t('registrars'), path: '/domainsk/registrars-marketshare' },
+            { icon: ListIcon, name: $t('nameservers'), path: '/domainsk/nameserver-marketshare' },
         ],
     },
-];
+]);
 
 const isActive = (path: string) => window.location.pathname === path;
 
@@ -42,14 +42,14 @@ const toggleSubmenu = (groupIndex: number, itemIndex: number) => {
 };
 
 const isAnySubmenuRouteActive = computed(() => {
-    return menuGroups.some((group) => group.items.some((item) => item.subItems && item.subItems.some((subItem) => isActive(subItem.path))));
+    return menuGroups.value.some((group) => group.items.some((item) => item.subItems && item.subItems.some((subItem) => isActive(subItem.path))));
 });
 
 const isSubmenuOpen = (groupIndex: number, itemIndex: number) => {
     const key = `${groupIndex}-${itemIndex}`;
     return (
         openSubmenu.value === key ||
-        (isAnySubmenuRouteActive.value && menuGroups[groupIndex].items[itemIndex].subItems?.some((subItem) => isActive(subItem.path)))
+        (isAnySubmenuRouteActive.value && menuGroups.value[groupIndex].items[itemIndex].subItems?.some((subItem) => isActive(subItem.path)))
     );
 };
 

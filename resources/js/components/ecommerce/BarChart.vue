@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import VueApexCharts from 'vue3-apexcharts';
+import { onMounted, ref } from 'vue';
 import DropdownMenu from '../common/DropdownMenu.vue';
+import VueApexCharts from 'vue3-apexcharts';
 
 interface Props {
     title: string;
@@ -17,6 +17,7 @@ const menuItems = [
     { label: 'Delete', onClick: () => console.log('Delete clicked') },
 ];
 
+
 const series = ref([
     {
         name: props.dataTitle,
@@ -26,20 +27,60 @@ const series = ref([
 
 const chartOptions = ref({
     chart: {
-        stacked: false,
-        zoom: {
-            enabled: false,
-        },
+        fontFamily: 'Outfit, sans-serif',
         toolbar: {
             show: false,
         },
     },
-    colors: ['#77B6EA', '#545454'],
+    plotOptions: {
+        bar: {
+            horizontal: false,
+            borderRadius: 5,
+        },
+    },
+    dataLabels: {
+        enabled: false,
+    },
+    stroke: {
+        show: true,
+        width: 4,
+        colors: ['transparent'],
+    },
     xaxis: {
         categories: props.labels,
+        axisBorder: {
+            show: false,
+        },
+        axisTicks: {
+            show: false,
+        },
     },
-    stroke: {},
+    legend: {
+        show: true,
+        fontFamily: 'Outfit',
+    },
+    grid: {
+        yaxis: {
+            lines: {
+                show: true,
+            },
+        },
+    },
+    fill: {
+        opacity: 1,
+    },
+    tooltip: {
+        x: {
+            show: false,
+        },
+        y: {
+            formatter: function (val: number | string) {
+                return val.toString();
+            },
+        },
+    },
 });
+
 </script>
 <template>
     <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 sm:px-6 sm:pt-6 dark:border-gray-800 dark:bg-white/[0.03]">
@@ -63,8 +104,8 @@ const chartOptions = ref({
         </div>
 
         <div class="custom-scrollbar max-w-full overflow-x-auto">
-            <div id="chartOne" class="-ml-5 pl-5 my-5 xl:min-w-full">
-                <VueApexCharts type="line" height="220" :options="chartOptions" :series="series" />
+            <div id="chartOne" class="-ml-5 min-w-[650px] pl-2 xl:min-w-full">
+                <VueApexCharts type="bar" height="auto" :options="chartOptions" :series="series" />
             </div>
         </div>
     </div>

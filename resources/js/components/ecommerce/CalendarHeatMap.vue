@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { CalendarHeatmapByDayType, CalendarHeatmapValue, MonthsArrayType } from '@/types';
-import { ref } from 'vue';
+import { computed } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
+import { t as $t } from '../../helpers/i18n';
 
 interface Props {
     title: string;
@@ -13,25 +14,27 @@ const getDaysInMonth = (month: number, year: number): number => {
     return new Date(year, month, 0).getDate();
 };
 
-const months: MonthsArrayType[] = [
-    { name: 'January', index: 1 },
-    { name: 'February', index: 2 },
-    { name: 'March', index: 3 },
-    { name: 'April', index: 4 },
-    { name: 'May', index: 5 },
-    { name: 'June', index: 6 },
-    { name: 'July', index: 7 },
-    { name: 'August', index: 8 },
-    { name: 'September', index: 9 },
-    { name: 'October', index: 10 },
-    { name: 'November', index: 11 },
-    { name: 'December', index: 12 },
-];
+const months = computed<MonthsArrayType[]>(() => [
+    { name: $t('january'), index: 1 },
+    { name: $t('february'), index: 2 },
+    { name: $t('march'), index: 3 },
+    { name: $t('april'), index: 4 },
+    { name: $t('may'), index: 5 },
+    { name: $t('june'), index: 6 },
+    { name: $t('july'), index: 7 },
+    { name: $t('august'), index: 8 },
+    { name: $t('september'), index: 9 },
+    { name: $t('october'), index: 10 },
+    { name: $t('november'), index: 11 },
+    { name: $t('december'), index: 12 },
+]);
 
 const today: Date = new Date();
 const thisMonth: number = today.getMonth();
 const thisYear: number = today.getFullYear();
-const nextYearInMonths: MonthsArrayType[] = thisMonth === 0 ? months : [...months.slice(thisMonth), ...months.slice(0, thisMonth)];
+const nextYearInMonths = computed<MonthsArrayType[]>(() =>
+    thisMonth === 0 ? months.value : [...months.value.slice(thisMonth), ...months.value.slice(0, thisMonth)],
+);
 const dataMap = new Map<string, number[]>();
 
 props.data.forEach((item) => {
@@ -41,8 +44,8 @@ props.data.forEach((item) => {
     dataMap.get(key)![day] = item.domain_count;
 });
 
-const monthlyData = ref<CalendarHeatmapValue[]>(
-    nextYearInMonths.map((month: MonthsArrayType) => {
+const monthlyData = computed<CalendarHeatmapValue[]>(() =>
+    nextYearInMonths.value.map((month: MonthsArrayType) => {
         const year: number = month.index <= thisMonth ? thisYear + 1 : thisYear;
         const key: string = `${year}-${String(month.index).padStart(2, '0')}`;
         const daysInMonth: number = getDaysInMonth(month.index, year);
@@ -62,17 +65,54 @@ const monthlyData = ref<CalendarHeatmapValue[]>(
     }),
 );
 
-const chartOptions = ref({
+const chartOptions = computed(() => ({
     dataLabels: {
         //enabled: false,
     },
-    colors: ['#008FFB'],
+    //colors: ['#008FFB'],
     plotOptions: {
         heatmap: {
+            shadeIntensity: 0.5,
+            radius: 0,
+            useFillColorAsStroke: true,
             distributed: true,
+            colorScale: {
+                ranges: [
+                    {
+                        from: 0,
+                        to: 500,
+                        name: $t('very_low'),
+                        color: '#dadfff',
+                    },
+                    {
+                        from: 501,
+                        to: 900,
+                        name: $t('low'),
+                        color: '#b5bfff',
+                    },
+                    {
+                        from: 901,
+                        to: 1200,
+                        name: $t('medium'),
+                        color: '#909fff',
+                    },
+                    {
+                        from: 1201,
+                        to: 1500,
+                        name: $t('high'),
+                        color: '#6b7fff',
+                    },
+                    {
+                        from: 1501,
+                        to: 2000,
+                        name: $t('extreme'),
+                        color: '#465FFF',
+                    },
+                ],
+            },
         },
     },
-});
+}));
 </script>
 <template>
     <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white px-5 pt-5 sm:px-6 sm:pt-6 dark:border-gray-800 dark:bg-white/[0.03]">
@@ -81,7 +121,7 @@ const chartOptions = ref({
         </div>
 
         <div class="custom-scrollbar max-w-full overflow-x-auto">
-            <div id="chartOne" class="-ml-5 min-w-[650px] pl-2 xl:min-w-full">
+            <div id="chartOne" class="my-5 -ml-5 min-w-[650px] pl-5 xl:min-w-full">
                 <VueApexCharts type="heatmap" height="550" :options="chartOptions" :series="monthlyData.slice().reverse()" />
             </div>
         </div>
