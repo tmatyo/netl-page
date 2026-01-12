@@ -1,4 +1,5 @@
 import { AppPageProps } from '@/types/index';
+import { t as translate } from '../helpers/i18n';
 
 // Extend ImportMeta interface for Vite...
 declare module 'vite/client' {
@@ -22,5 +23,6 @@ declare module 'vue' {
         $inertia: typeof Router;
         $page: Page;
         $headManager: ReturnType<typeof createHeadManager>;
+        $t: typeof translate;
     }
 }

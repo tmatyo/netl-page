@@ -14,6 +14,7 @@ import { createApp, h } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 import SidebarProvider from './components/layout/SidebarProvider.vue';
 import ThemeProvider from './components/layout/ThemeProvider.vue';
+import { t } from './helpers/i18n';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -21,7 +22,7 @@ createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
     resolve: (name) => resolvePageComponent(`./pages/${name}.vue`, import.meta.glob<DefineComponent>('./pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
-        createApp({
+        const app = createApp({
             render: () =>
                 h(
                     ThemeProvider,
@@ -37,10 +38,11 @@ createInertiaApp({
                             ),
                     },
                 ),
-        })
-            .use(plugin)
-            .use(VueApexCharts)
-            .mount(el);
+        });
+        app.use(plugin);
+        app.use({ install: (app) => (app.config.globalProperties.$t = t) });
+        app.use(VueApexCharts);
+        app.mount(el);
     },
     progress: {
         color: '#4B5563',
