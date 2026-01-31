@@ -4,6 +4,7 @@ import { Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import { t as $t } from '../../helpers/i18n';
 import { ChevronDownIcon, GridIcon, HorizontalDots, ListIcon } from '../../icons';
+import Logo from './Logo.vue';
 import SidebarWidget from './SidebarWidget.vue';
 
 const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar();
@@ -68,7 +69,7 @@ const endTransition = (el: Element) => {
 <template>
     <aside
         :class="[
-            'fixed top-0 left-0 z-99999 mt-16 flex h-screen flex-col border-r border-dashed border-gray-200 bg-white px-5 text-gray-900 transition-all duration-300 ease-in-out lg:mt-0 dark:border-gray-800 dark:bg-gray-900',
+            'fixed top-0 left-0 z-99999 mt-16 flex h-screen flex-col border-r border-dashed border-gray-200 dark:brand-border bg-white px-5 brand-text transition-all duration-300 ease-in-out lg:mt-0 dark:border-gray-800 dark:brand-bg',
             {
                 'lg:w-[290px]': isExpanded || isMobileOpen || isHovered,
                 'lg:w-[90px]': !isExpanded && !isHovered,
@@ -80,25 +81,9 @@ const endTransition = (el: Element) => {
         @mouseenter="!isExpanded && (isHovered = true)"
         @mouseleave="isHovered = false"
     >
-        <div :class="['flex py-8', !isExpanded && !isHovered ? 'lg:justify-center' : 'justify-start']">
+        <div :class="['flex justify-start py-8 lg:justify-center']">
             <Link href="/">
-                <img
-                    v-if="isExpanded || isHovered || isMobileOpen"
-                    class="dark:hidden"
-                    src="/images/logo/logo.svg"
-                    alt="Logo"
-                    width="150"
-                    height="40"
-                />
-                <img
-                    v-if="isExpanded || isHovered || isMobileOpen"
-                    class="hidden dark:block"
-                    src="/images/logo/logo-dark.svg"
-                    alt="Logo"
-                    width="150"
-                    height="40"
-                />
-                <img v-else src="/images/logo/logo-icon.svg" alt="Logo" width="32" height="32" />
+                <Logo class="w-full" />
             </Link>
         </div>
         <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
@@ -139,7 +124,7 @@ const endTransition = (el: Element) => {
                                         :class="[
                                             'ml-auto h-5 w-5 transition-transform duration-200',
                                             {
-                                                'text-brand-500 rotate-180': isSubmenuOpen(groupIndex, index),
+                                                'brand-text rotate-180': isSubmenuOpen(groupIndex, index),
                                             },
                                         ]"
                                     />

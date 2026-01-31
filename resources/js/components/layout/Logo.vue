@@ -1,13 +1,18 @@
-<?xml version="1.0" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
- "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
-<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- width="1000.000000pt" height="500.000000pt" viewBox="0 0 1000.000000 500.000000"
- preserveAspectRatio="xMidYMid meet">
-
-<g transform="translate(0.000000,500.000000) scale(0.100000,-0.100000)"
-fill="#EF6363" stroke="none">
-<path d="M389 4906 c-118 -33 -208 -110 -262 -224 l-32 -67 0 -2116 0 -2115
+<template>
+    <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+    <svg
+        version="1.0"
+        xmlns="http://www.w3.org/2000/svg"
+        width="1000.000000pt"
+        height="500.000000pt"
+        viewBox="0 0 1000.000000 500.000000"
+        preserveAspectRatio="xMidYMid meet"
+        class="w-auto h-20"
+    >
+        <g transform="translate(0.000000,500.000000) scale(0.100000,-0.100000)" fill="var(--color-brand-text)" stroke="none">
+            <title>WatchDog</title>
+            <path
+                d="M389 4906 c-118 -33 -208 -110 -262 -224 l-32 -67 0 -2116 0 -2115
 38 -76 c55 -112 141 -182 262 -214 74 -20 9136 -20 9210 0 121 32 207 102 262
 214 l38 76 0 2115 0 2116 -32 67 c-55 116 -144 191 -267 224 -73 20 -9146 19
 -9217 0z m1773 -1838 c3 -1372 -2 -1282 74 -1314 79 -33 151 1 191 91 17 38
@@ -23,6 +28,8 @@ m5158 1199 c203 -31 349 -66 495 -117 541 -190 938 -629 1051 -1165 64 -301
 -41 l-253 0 0 514 0 514 168 6 c286 12 413 36 562 109 117 57 232 170 283 277
 57 118 71 192 71 370 0 119 -4 170 -17 219 -74 263 -265 415 -593 471 -90 16
 -165 20 -376 20 l-263 1 -3 -1240 -2 -1241 -530 0 -530 0 0 1746 0 1745 858
--4 c726 -3 873 -6 962 -20z"/>
-</g>
-</svg>
+-4 c726 -3 873 -6 962 -20z"
+            />
+        </g>
+    </svg>
+</template>

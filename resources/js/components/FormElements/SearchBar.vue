@@ -48,7 +48,7 @@ const onSearch = (event: Event) => {
             />
             <button
                 type="submit"
-                class="hover:bg-brand-strong focus:ring-brand-medium absolute end-1.5 bottom-1.5 box-border rounded border border-transparent bg-[var(--color-brand-500)] px-3 py-1.5 text-xs leading-5 font-medium text-white shadow-xs focus:ring-4 focus:outline-none"
+                class="hover:bg-brand-strong focus:ring-brand-medium absolute end-1.5 bottom-1.5 box-border rounded border border-transparent bg-[var(--color-brand-text)] px-3 py-1.5 text-xs leading-5 font-medium text-white shadow-xs focus:ring-4 focus:outline-none"
             >
                 Search
             </button>

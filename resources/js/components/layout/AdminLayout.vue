@@ -18,7 +18,7 @@
             href="https://tailadmin.com/" 
             target="_blank" 
             rel="noopener noreferrer"
-            class="text-brand-500 hover:text-brand-600 transition-colors duration-200 font-medium"
+            class="brand-text hover:text-brand-600 transition-colors duration-200 font-medium"
           >
             TailAdmin
           </a>

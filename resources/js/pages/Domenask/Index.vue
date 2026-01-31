@@ -35,7 +35,7 @@ const queryParam: string = window.location.search;
 <template>
     <AdminLayout>
         <div v-if="props">
-            <h1 class="font-size-3xl text-[var(--color-brand-500)]">{{ $t('domain_statistics') }}</h1>
+            <h1 class="font-size-3xl brand-text">{{ $t('domain_statistics') }}</h1>
             <div class="mb-6 grid grid-cols-2 space-y-6 xl:grid-cols-4 xl:space-y-0 xl:space-x-6">
                 <DomainInfo
                     class="col-span-2"
@@ -53,7 +53,7 @@ const queryParam: string = window.location.search;
                 />
             </div>
 
-            <h1 v-if="queryParam.includes(crawlingInfoKeyword)" class="font-size-2xl col-span-12 text-[var(--color-brand-500)]">
+            <h1 v-if="queryParam.includes(crawlingInfoKeyword)" class="font-size-2xl col-span-12 brand-text">
                 {{ $t('crawling_info') }}
             </h1>
             <div v-if="queryParam.includes(crawlingInfoKeyword)" class="grid grid-cols-1 space-y-6">
@@ -80,7 +80,7 @@ const queryParam: string = window.location.search;
                 </div>
             </div>
 
-            <h1 class="font-size-2xl col-span-12 text-[var(--color-brand-500)]">{{ $t('marketshare_data') }}</h1>
+            <h1 class="font-size-2xl col-span-12 brand-text">{{ $t('marketshare_data') }}</h1>
             <div class="mb-6 grid grid-cols-1 gap-4 xl:grid-cols-3 xl:gap-6">
                 <div class="grid grid-rows-1 gap-4 xl:grid-rows-2 xl:gap-6">
                     <PieChart
@@ -126,7 +126,7 @@ const queryParam: string = window.location.search;
                 </div>
             </div>
 
-            <h1 class="font-size-2xl col-span-12 text-[var(--color-brand-500)]">{{ $t('expiring_domains_heatmap') }}</h1>
+            <h1 class="font-size-2xl col-span-12 brand-text">{{ $t('expiring_domains_heatmap') }}</h1>
             <div class="grid grid-cols-1 gap-4 xl:grid-cols-1 xl:gap-6">
                 <CalendarHeatMap :title="$t('expiring_domains_count')" :data="calendarHeatmapByDay" :months="$t('months')" :levels="$t('levels')"/>
             </div>

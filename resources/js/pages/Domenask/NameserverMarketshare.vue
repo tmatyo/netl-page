@@ -20,7 +20,7 @@ const search = (searchText: string) => {
 
 <template>
     <AdminLayout>
-        <h1 class="font-size-3xl text-[var(--color-brand-500)]">
+        <h1 class="font-size-3xl brand-text">
             Name Server Marketshare <small class="text-gray-700">({{ nameserverMarketShare.total }})</small>
         </h1>
         <SearchBar :searchTerm="searchQuery ?? ''" @search="(searchQuery: string) => search(searchQuery)" />

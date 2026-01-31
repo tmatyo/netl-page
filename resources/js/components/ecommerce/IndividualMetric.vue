@@ -13,7 +13,7 @@ const props = defineProps<Props>();
 const valueToPrint = ref<string | number>(typeof props.value === 'string' ? props.value : Number(props.value));
 </script>
 <template>
-    <div class="rounded-2xl border border-gray-200 bg-white p-5 md:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
+    <div class="rounded-2xl border border-gray-200 bg-white p-5 md:p-6 dark:brand-border dark:bg-white/[0.03]">
         <div class="flex items-end justify-between">
             <div>
                 <span class="text-sm text-gray-500 dark:text-gray-400">{{ title }}</span>
