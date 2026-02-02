@@ -33,7 +33,7 @@ class TableRotation
                 DB::statement("RENAME TABLE " . $statement . ";");
             } catch (Throwable $ex) {
                 Log::error('dropBackupTable(' . $table . ') failed: ', [
-                    'exception' => $ex
+                    'exception' => $ex->getMessage()
                 ]);
                 return false;
             }
@@ -85,7 +85,7 @@ class TableRotation
                 $tempToOld .= self::prepareRenameTableQuery($temp, $old) . $isLastItem ? ';' : ', ';
             } catch (Throwable $ex) {
                 Log::error('reverseTableSwap validation failed: ', [
-                    'exception' => $ex
+                    'exception' => $ex->getMessage()
                 ]);
             }
         }
@@ -97,7 +97,7 @@ class TableRotation
                 DB::statement("RENAME TABLE " . $tempToOld);
             } catch (Throwable $ex) {
                 Log::error('reverseTableSwap renaming failed: ', [
-                    'exception' => $ex
+                    'exception' => $ex->getMessage()
                 ]);
             }
         });
