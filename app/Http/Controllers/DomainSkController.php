@@ -29,7 +29,6 @@ class DomainSkController extends Controller
         $ownersMarketShare = null;
         $registrarsMarketShare = null;
         $nameserverMarketShare = null;
-        $noData = [];
 
         try {
             $crawlingInfo = Crawling::orderBy('time_generated', 'asc')->take(2)->get();
@@ -41,7 +40,6 @@ class DomainSkController extends Controller
             $ownersMarketShare = OwnerMarketShare::query()->orderBy('domain_count', 'desc')->take(10)->get(['domain_count', 'owner']);
             $registrarsMarketShare = RegistrarMarketShare::query()->orderBy('domain_count', 'desc')->take(10)->get(['domain_count', 'registrar']);
             $nameserverMarketShare = NameserverMarketShare::query()->orderBy('count', 'desc')->take(10)->get(['count', 'ns']);
-            $noData = array_merge($crawlingInfo, $domainStatistics, $numberOfDomainsMetric, $crawlingDurationMetric, $downloadSpeedMetric, $calendarHeatmapByDay, $ownersMarketShare, $registrarsMarketShare, $nameserverMarketShare);
         } catch (Throwable $ex) {
             Log::error("HOME PAGE: Data query failed: ", ['exception' => $ex->getMessage()]);
         }
@@ -57,7 +55,6 @@ class DomainSkController extends Controller
             'ownersMarketShare' => $ownersMarketShare,
             'registrarsMarketShare' => $registrarsMarketShare,
             'nameserverMarketShare' => $nameserverMarketShare,
-            'noData' => count($noData) === 0,
         ]);
     }
 

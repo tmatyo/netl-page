@@ -27,14 +27,12 @@ const props = defineProps<{
     ownersMarketShare: OwnerMarketShareType[];
     registrarsMarketShare: RegistrarMarketShareType[];
     nameserverMarketShare: NameServerMarketShareType[];
-    noData: boolean;
 }>();
-
 const crawlingInfoKeyword: string = 'agent=007';
 const queryParam: string = window.location.search;
 </script>
 <template>
-    <AdminLayout :noData="noData">
+    <AdminLayout :noData="!domainStatistics">
         <div>
             <h1 class="font-size-3xl brand-text" v-if="domainStatistics || numberOfDomainsMetric.length">{{ $t('domain_statistics') }}</h1>
             <div class="mb-6 grid grid-cols-2 space-y-6 xl:grid-cols-4 xl:space-y-0 xl:space-x-6">
@@ -56,17 +54,12 @@ const queryParam: string = window.location.search;
                 />
             </div>
 
-            <h1
-                v-if="domainStatistics && crawlingDurationMetric.length && downloadSpeedMetric.length && queryParam.includes(crawlingInfoKeyword)"
-                class="font-size-2xl brand-text col-span-12"
-            >
+            <h1 v-if="domainStatistics && queryParam.includes(crawlingInfoKeyword)" class="font-size-2xl brand-text col-span-12">
                 {{ $t('crawling_info') }}
             </h1>
-            <div
-                v-if="domainStatistics && crawlingDurationMetric.length && downloadSpeedMetric.length && queryParam.includes(crawlingInfoKeyword)"
-                class="grid grid-cols-1 space-y-6"
-            >
+            <div v-if="queryParam.includes(crawlingInfoKeyword)" class="grid grid-cols-1 space-y-6">
                 <CrawlingInfo
+                    v-if="domainStatistics"
                     class="col-span-3"
                     :latest="latestCrawling"
                     :previous="previousCrawling"
@@ -75,13 +68,14 @@ const queryParam: string = window.location.search;
                 />
                 <div class="mb-6 grid grid-cols-1 space-y-6 xl:grid-cols-2 xl:space-y-0 xl:space-x-6">
                     <LineChart
-                        v-if="crawlingDurationMetric"
+                        v-if="crawlingDurationMetric.length"
                         :title="$t('crawling_duration_over_time')"
                         :data="crawlingDurationMetric.map((item: MetricType) => parseInt(item.value.toFixed(4)))"
                         :dataTitle="$t('crawling_duration_sec')"
                         :labels="crawlingDurationMetric.map((item: MetricType) => item.date)"
                     />
                     <LineChart
+                        v-if="downloadSpeedMetric.length"
                         :title="$t('download_speed_over_time')"
                         :data="downloadSpeedMetric.map((item: MetricType) => Math.round(item.value / 1024 / 1024))"
                         :dataTitle="$t('download_speed_mbps')"
@@ -145,8 +139,8 @@ const queryParam: string = window.location.search;
             <div class="grid grid-cols-1 gap-4 xl:grid-cols-1 xl:gap-6" v-if="calendarHeatmapByDay.length">
                 <CalendarHeatMap :title="$t('expiring_domains_count')" :data="calendarHeatmapByDay" :months="$t('months')" :levels="$t('levels')" />
             </div>
-            <div v-if="noData">
-                <h3 class="text-gray-500 text-center">{{ $t('no_data_yet') }}</h3>
+            <div v-if="!domainStatistics">
+                <h3 class="text-center text-gray-500">{{ $t('no_data_yet') }}</h3>
             </div>
         </div>
     </AdminLayout>
