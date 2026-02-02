@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
 use App\Models\DomainStatistic;
 use App\Models\Crawling;
 use App\Models\CalendarHeatmapByDay;
@@ -15,7 +16,10 @@ use App\Services\DomainSk;
 use App\Services\Stats;
 use App\Services\ExpiringDomains;
 use App\Services\Metrics;
+use App\Services\TableRotation;
 use Throwable;
+use Exception;
+use RuntimeException;
 
 class ApiController extends Controller
 {
@@ -30,7 +34,7 @@ class ApiController extends Controller
         ]);
     }
 
-    public function import(Request $request, DomainSk $domainSk, Stats $stats, ExpiringDomains $expiringDomains, Metrics $metricService)
+    public function import(Request $request, DomainSk $domainSk, Stats $stats, ExpiringDomains $expiringDomains, Metrics $metricService, TableRotation $tableRotation)
     {
 
         # set higher memory limit and execution time
@@ -42,7 +46,7 @@ class ApiController extends Controller
             $request->validate([
                 'data_gz' => 'required|file|max:40960', // max 40 MB
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("API IMPORT: File validation failed - " . $e->getMessage());
         }
 
@@ -72,6 +76,12 @@ class ApiController extends Controller
 
         # process and save data within a transaction
         try {
+            $tablesSwapped = $tableRotation->swapTables();
+            if (!$tablesSwapped) {
+                Log::error("Tables not prepared for next step. Stopping process.");
+                throw new RuntimeException("Tables not prepared for next step. Stopping process.");
+            }
+
             DB::transaction(function () use ($data, $domainSk, $stats, $expiringDomains, $metricService) {
 
                 # save the domains
@@ -140,8 +150,8 @@ class ApiController extends Controller
                 'message' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
-                'sql' => $e instanceof \Illuminate\Database\QueryException ? $e->getSql() : null,
-                'bindings' => $e instanceof \Illuminate\Database\QueryException ? $e->getBindings() : null,
+                'sql' => $e instanceof QueryException ? $e->getSql() : null,
+                'bindings' => $e instanceof QueryException ? $e->getBindings() : null,
                 'stack_trace' => $e->getTraceAsString()
             ]);
             throw $e;
