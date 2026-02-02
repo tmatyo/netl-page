@@ -20,11 +20,11 @@ const search = (searchText: string) => {
 
 <template>
     <AdminLayout>
-        <h1 class="font-size-3xl brand-text">
-            Registrar Marketshare <small class="text-gray-700">({{ registrarsMarketShare.total }})</small>
-        </h1>
-        <SearchBar :searchTerm="searchQuery ?? ''" @search="(searchQuery: string) => search(searchQuery)" />
         <div class="my-3" v-if="registrarsMarketShare.data.length > 0">
+            <h1 class="font-size-3xl brand-text">
+                Registrar Marketshare <small class="text-gray-700">({{ registrarsMarketShare.total }})</small>
+            </h1>
+            <SearchBar :searchTerm="searchQuery ?? ''" @search="(searchQuery: string) => search(searchQuery)" />
             <Pagination
                 :data="{ current_page: registrarsMarketShare.current_page, last_page: registrarsMarketShare.last_page }"
                 :links="{

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Throwable;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\CalendarHeatmapByDay;
@@ -13,28 +14,50 @@ use App\Models\RegistrarMarketShare;
 use App\Models\NameserverMarketShare;
 use App\Models\Metric;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Log;
 
 class DomainSkController extends Controller
 {
     public function domainStatistics()
     {
+        $crawlingInfo = null;
+        $domainStatistics = null;
+        $numberOfDomainsMetric = null;
+        $crawlingDurationMetric = null;
+        $downloadSpeedMetric = null;
+        $calendarHeatmapByDay = null;
+        $ownersMarketShare = null;
+        $registrarsMarketShare = null;
+        $nameserverMarketShare = null;
+        $noData = [];
+
         try {
             $crawlingInfo = Crawling::orderBy('time_generated', 'asc')->take(2)->get();
-        } catch (Exception $e) {
-            $crawlingInfo = null;
+            $domainStatistics = DomainStatistic::get()->first();
+            $numberOfDomainsMetric = Metric::where('metric_type', 'number_of_domains')->orderBy('date', 'asc')->get(['value', 'date']);
+            $crawlingDurationMetric = Metric::where('metric_type', 'crawling_duration')->orderBy('date', 'asc')->get(['value', 'date']);
+            $downloadSpeedMetric = Metric::where('metric_type', 'download_speed')->orderBy('date', 'asc')->get(['value', 'date']);
+            $calendarHeatmapByDay = CalendarHeatmapByDay::orderBy('expiry_day', 'asc')->take(365)->get(['expiry_day', 'domain_count']);
+            $ownersMarketShare = OwnerMarketShare::query()->orderBy('domain_count', 'desc')->take(10)->get(['domain_count', 'owner']);
+            $registrarsMarketShare = RegistrarMarketShare::query()->orderBy('domain_count', 'desc')->take(10)->get(['domain_count', 'registrar']);
+            $nameserverMarketShare = NameserverMarketShare::query()->orderBy('count', 'desc')->take(10)->get(['count', 'ns']);
+            $noData = array_merge($crawlingInfo, $domainStatistics, $numberOfDomainsMetric, $crawlingDurationMetric, $downloadSpeedMetric, $calendarHeatmapByDay, $ownersMarketShare, $registrarsMarketShare, $nameserverMarketShare);
+        } catch (Throwable $ex) {
+            Log::error("HOME PAGE: Data query failed: ", ['exception' => $ex->getMessage()]);
         }
 
         return Inertia::render('Domenask/Index', [
             'latestCrawling' => $crawlingInfo[1] ?? [],
             'previousCrawling' => $crawlingInfo[0] ?? [],
-            'domainStatistics' => DomainStatistic::get()->first(),
-            'numberOfDomainsMetric' => Metric::where('metric_type', 'number_of_domains')->orderBy('date', 'asc')->get(['value', 'date']),
-            'crawlingDurationMetric' => Metric::where('metric_type', 'crawling_duration')->orderBy('date', 'asc')->get(['value', 'date']),
-            'downloadSpeedMetric' => Metric::where('metric_type', 'download_speed')->orderBy('date', 'asc')->get(['value', 'date']),
-            'calendarHeatmapByDay' => CalendarHeatmapByDay::orderBy('expiry_day', 'asc')->take(365)->get(['expiry_day', 'domain_count']),
-            'ownersMarketShare' => OwnerMarketShare::query()->orderBy('domain_count', 'desc')->take(10)->get(['domain_count', 'owner']),
-            'registrarsMarketShare' => RegistrarMarketShare::query()->orderBy('domain_count', 'desc')->take(10)->get(['domain_count', 'registrar']),
-            'nameserverMarketShare' => NameserverMarketShare::query()->orderBy('count', 'desc')->take(10)->get(['count', 'ns']),
+            'domainStatistics' => $domainStatistics,
+            'numberOfDomainsMetric' => $numberOfDomainsMetric,
+            'crawlingDurationMetric' => $crawlingDurationMetric,
+            'downloadSpeedMetric' => $downloadSpeedMetric,
+            'calendarHeatmapByDay' => $calendarHeatmapByDay,
+            'ownersMarketShare' => $ownersMarketShare,
+            'registrarsMarketShare' => $registrarsMarketShare,
+            'nameserverMarketShare' => $nameserverMarketShare,
+            'noData' => count($noData) === 0,
         ]);
     }
 

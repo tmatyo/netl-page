@@ -22,11 +22,11 @@ const search = (searchText: string) => {
 
 <template>
     <AdminLayout>
+        <div class="my-3" v-if="domains.data.length > 0">
         <h1 class="font-size-3xl brand-text">
             Domain List <small class="text-gray-700">({{ domains.total }})</small>
         </h1>
         <SearchBar :searchTerm="searchQuery ?? ''" @search="(searchQuery: string) => search(searchQuery)" />
-        <div class="my-3" v-if="domains.data.length > 0">
             <Pagination
                 :data="{ current_page: domains.current_page, last_page: domains.last_page }"
                 :links="{

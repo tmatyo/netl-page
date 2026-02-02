@@ -19,7 +19,7 @@ import DomainInfo from './DomainInfo.vue';
 const props = defineProps<{
     latestCrawling: CrawlInfo;
     previousCrawling: CrawlInfo;
-    domainStatistics: DomainStatisticsType;
+    domainStatistics: DomainStatisticsType | null;
     numberOfDomainsMetric: MetricType[];
     crawlingDurationMetric: MetricType[];
     downloadSpeedMetric: MetricType[];
@@ -27,17 +27,19 @@ const props = defineProps<{
     ownersMarketShare: OwnerMarketShareType[];
     registrarsMarketShare: RegistrarMarketShareType[];
     nameserverMarketShare: NameServerMarketShareType[];
+    noData: boolean;
 }>();
 
-const crawlingInfoKeyword: string = 'showall';
+const crawlingInfoKeyword: string = 'agent=007';
 const queryParam: string = window.location.search;
 </script>
 <template>
-    <AdminLayout>
-        <div v-if="props">
-            <h1 class="font-size-3xl brand-text">{{ $t('domain_statistics') }}</h1>
+    <AdminLayout :noData="noData">
+        <div>
+            <h1 class="font-size-3xl brand-text" v-if="domainStatistics || numberOfDomainsMetric.length">{{ $t('domain_statistics') }}</h1>
             <div class="mb-6 grid grid-cols-2 space-y-6 xl:grid-cols-4 xl:space-y-0 xl:space-x-6">
                 <DomainInfo
+                    v-if="domainStatistics"
                     class="col-span-2"
                     :latest="latestCrawling"
                     :previous="previousCrawling"
@@ -45,6 +47,7 @@ const queryParam: string = window.location.search;
                     :longestDomainLength="domainStatistics.longest_domain_name_length"
                 />
                 <LineChart
+                    v-if="numberOfDomainsMetric.length"
                     class="col-span-2"
                     :title="$t('domain_count_over_time')"
                     :data="numberOfDomainsMetric.map((item: MetricType) => item.value)"
@@ -53,10 +56,16 @@ const queryParam: string = window.location.search;
                 />
             </div>
 
-            <h1 v-if="queryParam.includes(crawlingInfoKeyword)" class="font-size-2xl col-span-12 brand-text">
+            <h1
+                v-if="domainStatistics && crawlingDurationMetric.length && downloadSpeedMetric.length && queryParam.includes(crawlingInfoKeyword)"
+                class="font-size-2xl brand-text col-span-12"
+            >
                 {{ $t('crawling_info') }}
             </h1>
-            <div v-if="queryParam.includes(crawlingInfoKeyword)" class="grid grid-cols-1 space-y-6">
+            <div
+                v-if="domainStatistics && crawlingDurationMetric.length && downloadSpeedMetric.length && queryParam.includes(crawlingInfoKeyword)"
+                class="grid grid-cols-1 space-y-6"
+            >
                 <CrawlingInfo
                     class="col-span-3"
                     :latest="latestCrawling"
@@ -66,6 +75,7 @@ const queryParam: string = window.location.search;
                 />
                 <div class="mb-6 grid grid-cols-1 space-y-6 xl:grid-cols-2 xl:space-y-0 xl:space-x-6">
                     <LineChart
+                        v-if="crawlingDurationMetric"
                         :title="$t('crawling_duration_over_time')"
                         :data="crawlingDurationMetric.map((item: MetricType) => parseInt(item.value.toFixed(4)))"
                         :dataTitle="$t('crawling_duration_sec')"
@@ -80,9 +90,14 @@ const queryParam: string = window.location.search;
                 </div>
             </div>
 
-            <h1 class="font-size-2xl col-span-12 brand-text">{{ $t('marketshare_data') }}</h1>
+            <h1
+                class="font-size-2xl brand-text col-span-12"
+                v-if="ownersMarketShare.length || registrarsMarketShare.length || nameserverMarketShare.length"
+            >
+                {{ $t('marketshare_data') }}
+            </h1>
             <div class="mb-6 grid grid-cols-1 gap-4 xl:grid-cols-3 xl:gap-6">
-                <div class="grid grid-rows-1 gap-4 xl:grid-rows-2 xl:gap-6">
+                <div class="grid grid-rows-1 gap-4 xl:grid-rows-2 xl:gap-6" v-if="ownersMarketShare.length">
                     <PieChart
                         :title="$t('owner_marketshare')"
                         :data="ownersMarketShare.slice(0, 19).map((item: OwnerMarketShareType) => item.domain_count)"
@@ -96,7 +111,7 @@ const queryParam: string = window.location.search;
                         :labels="ownersMarketShare.slice(0, 19).map((item: OwnerMarketShareType) => item.owner)"
                     />
                 </div>
-                <div class="grid grid-rows-1 gap-4 xl:grid-rows-2 xl:gap-6">
+                <div class="grid grid-rows-1 gap-4 xl:grid-rows-2 xl:gap-6" v-if="registrarsMarketShare.length">
                     <PieChart
                         :title="$t('registrar_marketshare')"
                         :data="registrarsMarketShare.slice(0, 19).map((item: RegistrarMarketShareType) => item.domain_count)"
@@ -110,7 +125,7 @@ const queryParam: string = window.location.search;
                         :labels="registrarsMarketShare.slice(0, 19).map((item: RegistrarMarketShareType) => item.registrar)"
                     />
                 </div>
-                <div class="grid grid-rows-1 gap-4 xl:grid-rows-2 xl:gap-6">
+                <div class="grid grid-rows-1 gap-4 xl:grid-rows-2 xl:gap-6" v-if="nameserverMarketShare.length">
                     <PieChart
                         :title="$t('ns_marketshare')"
                         :data="nameserverMarketShare.slice(0, 19).map((item: NameServerMarketShareType) => item.count)"
@@ -126,9 +141,12 @@ const queryParam: string = window.location.search;
                 </div>
             </div>
 
-            <h1 class="font-size-2xl col-span-12 brand-text">{{ $t('expiring_domains_heatmap') }}</h1>
-            <div class="grid grid-cols-1 gap-4 xl:grid-cols-1 xl:gap-6">
-                <CalendarHeatMap :title="$t('expiring_domains_count')" :data="calendarHeatmapByDay" :months="$t('months')" :levels="$t('levels')"/>
+            <h1 class="font-size-2xl brand-text col-span-12" v-if="calendarHeatmapByDay.length">{{ $t('expiring_domains_heatmap') }}</h1>
+            <div class="grid grid-cols-1 gap-4 xl:grid-cols-1 xl:gap-6" v-if="calendarHeatmapByDay.length">
+                <CalendarHeatMap :title="$t('expiring_domains_count')" :data="calendarHeatmapByDay" :months="$t('months')" :levels="$t('levels')" />
+            </div>
+            <div v-if="noData">
+                <h3 class="text-gray-500 text-center">{{ $t('no_data_yet') }}</h3>
             </div>
         </div>
     </AdminLayout>

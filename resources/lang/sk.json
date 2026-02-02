@@ -34,7 +34,7 @@
     "crawling_duration": "Trvanie spracovania",
     "download_duration": "Trvanie sťahovania",
     "download_speed": "Rýchlosť sťahovania",
-    "avg_crawling_duration":"Priemerné trvanie spracovania",
+    "avg_crawling_duration": "Priemerné trvanie spracovania",
     "avg_download_speed": "Priemerná rýchlosť sťahovania",
     "crawling_duration_over_time": "Trvanie spracovania v minulosti (sekundy)",
     "crawling_duration_sec": "Trvanie spracovania (s)",
@@ -51,5 +51,6 @@
     "medium": "stredný",
     "high": "vysoký",
     "extreme": "extrémny",
-    "heavily_inspired_by": "Webdizajn silne inšpirovaný "
+    "heavily_inspired_by": "Webdizajn silne inšpirovaný ",
+    "no_data_yet": "Žiadne údaje."
 }

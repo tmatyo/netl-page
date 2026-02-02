@@ -7,6 +7,7 @@ import { ChevronDownIcon, GridIcon, HorizontalDots, ListIcon } from '../../icons
 import Logo from './Logo.vue';
 import SidebarWidget from './SidebarWidget.vue';
 
+defineProps<{ noData?: boolean }>();
 const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar();
 type MenuGroupType = {
     title: string;
@@ -69,7 +70,7 @@ const endTransition = (el: Element) => {
 <template>
     <aside
         :class="[
-            'fixed top-0 left-0 z-99999 mt-16 flex h-screen flex-col border-r border-dashed border-gray-200 dark:brand-border bg-white px-5 brand-text transition-all duration-300 ease-in-out lg:mt-0 dark:border-gray-800 dark:brand-bg',
+            'dark:brand-border brand-text dark:brand-bg fixed top-0 left-0 z-99999 mt-16 flex h-screen flex-col border-r border-dashed border-gray-200 bg-white px-5 transition-all duration-300 ease-in-out lg:mt-0 dark:border-gray-800',
             {
                 'lg:w-[290px]': isExpanded || isMobileOpen || isHovered,
                 'lg:w-[90px]': !isExpanded && !isHovered,
@@ -88,7 +89,7 @@ const endTransition = (el: Element) => {
         </div>
         <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
             <nav class="mb-6">
-                <div class="flex flex-col gap-4">
+                <div class="flex flex-col gap-4" v-if="!noData">
                     <div v-for="(menuGroup, groupIndex) in menuGroups" :key="groupIndex">
                         <h2
                             :class="[

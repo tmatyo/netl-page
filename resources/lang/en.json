@@ -34,7 +34,7 @@
     "crawling_duration": "Crawling duration",
     "download_duration": "Download duration",
     "download_speed": "Download speed",
-    "avg_crawling_duration":"Average crawling duration",
+    "avg_crawling_duration": "Average crawling duration",
     "avg_download_speed": "Average download speed",
     "crawling_duration_over_time": "Crawling duration over time (seconds)",
     "crawling_duration_sec": "Crawling duration (s)",
@@ -51,5 +51,6 @@
     "medium": "medium",
     "high": "high",
     "extreme": "extreme",
-    "heavily_inspired_by": "Webdesign heavily inspired by "
+    "heavily_inspired_by": "Webdesign heavily inspired by ",
+    "no_data_yet": "No data."
 }

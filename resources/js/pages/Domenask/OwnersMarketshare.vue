@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import NothingToSeeHere from '@/components/common/NothingToSeeHere.vue';
 import SearchBar from '@/components/FormElements/SearchBar.vue';
 import AdminLayout from '@/components/layout/AdminLayout.vue';
 import Pagination from '@/components/Pagination.vue';
-import NothingToSeeHere from '@/components/common/NothingToSeeHere.vue';
 import { OwnerMarketSharePropsType } from '@/types';
 import { router } from '@inertiajs/vue3';
 defineProps<OwnerMarketSharePropsType>();
@@ -21,11 +21,11 @@ const search = (searchText: string) => {
 
 <template>
     <AdminLayout>
-        <h1 class="font-size-3xl brand-text">
-            Owner Marketshare <small class="text-gray-700">({{ ownersMarketShare.total }})</small>
-        </h1>
-        <SearchBar :searchTerm="searchQuery ?? ''" @search="(searchQuery: string) => search(searchQuery)" />
         <div class="my-3" v-if="ownersMarketShare.data.length > 0">
+            <h1 class="font-size-3xl brand-text">
+                Owner Marketshare <small class="text-gray-700">({{ ownersMarketShare.total }})</small>
+            </h1>
+            <SearchBar :searchTerm="searchQuery ?? ''" @search="(searchQuery: string) => search(searchQuery)" />
             <Pagination
                 :data="{ current_page: ownersMarketShare.current_page, last_page: ownersMarketShare.last_page }"
                 :links="{
