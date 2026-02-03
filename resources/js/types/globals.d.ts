@@ -1,4 +1,5 @@
 import { AppPageProps } from '@/types/index';
+import ApexCharts from 'apexcharts';
 import { t as translate } from '../helpers/i18n';
 
 // Extend ImportMeta interface for Vite...
@@ -24,5 +25,6 @@ declare module 'vue' {
         $page: Page;
         $headManager: ReturnType<typeof createHeadManager>;
         $t: typeof translate;
+        apexcharts: typeof ApexCharts;
     }
 }
