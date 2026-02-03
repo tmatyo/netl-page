@@ -40,7 +40,7 @@ const onSearch = (event: Event) => {
                 v-model="searchTerm"
                 type="search"
                 id="search"
-                class="border-default-medium text-heading rounded border-gray-300 dark:border-gray-800 focus:ring-brand focus:border-brand placeholder:text-body block w-full border p-3 ps-9 text-sm shadow-xs text-gray-800 dark:text-gray-300"
+                class="border-default-medium text-heading rounded border-gray-300 dark:brand-border focus:ring-brand focus:border-brand placeholder:text-body block w-full border p-3 ps-9 text-sm shadow-xs text-gray-800 dark:text-gray-300"
                 placeholder="Search"
                 minlength="3"
                 maxlength="256"

@@ -69,7 +69,7 @@ const chartOptions = computed(() => ({
     dataLabels: {
         //enabled: false,
     },
-    //colors: ['#008FFB'],
+    //colors: [props.accentColor],
     plotOptions: {
         heatmap: {
             shadeIntensity: 0.5,
@@ -82,31 +82,31 @@ const chartOptions = computed(() => ({
                         from: 0,
                         to: 500,
                         name: $t('very_low'),
-                        color: '#dadfff',
+                        color: '#f5a1a1',//'#dadfff',
                     },
                     {
                         from: 501,
                         to: 900,
                         name: $t('low'),
-                        color: '#b5bfff',
+                        color: '#f28282',//'#b5bfff',
                     },
                     {
                         from: 901,
                         to: 1200,
                         name: $t('medium'),
-                        color: '#909fff',
+                        color: '#ef6363',//'#909fff',
                     },
                     {
                         from: 1201,
                         to: 1500,
                         name: $t('high'),
-                        color: '#6b7fff',
+                        color: '#bf4f4f',//'#6b7fff',
                     },
                     {
                         from: 1501,
                         to: 2000,
                         name: $t('extreme'),
-                        color: '#465FFF',
+                        color: '#8f3b3b',//'#465FFF',
                     },
                 ],
             },

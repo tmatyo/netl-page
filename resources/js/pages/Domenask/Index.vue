@@ -30,6 +30,7 @@ const props = defineProps<{
 }>();
 const crawlingInfoKeyword: string = 'agent=007';
 const queryParam: string = window.location.search;
+const accentColor: string = window.getComputedStyle(document.body).getPropertyValue('--color-brand-text');
 </script>
 <template>
     <AdminLayout :noData="!domainStatistics">
@@ -51,6 +52,7 @@ const queryParam: string = window.location.search;
                     :data="numberOfDomainsMetric.map((item: MetricType) => item.value)"
                     :dataTitle="$t('domain_count')"
                     :labels="numberOfDomainsMetric.map((item: MetricType) => item.date)"
+                    :accentColor="accentColor"
                 />
             </div>
 
@@ -73,6 +75,7 @@ const queryParam: string = window.location.search;
                         :data="crawlingDurationMetric.map((item: MetricType) => parseInt(item.value.toFixed(4)))"
                         :dataTitle="$t('crawling_duration_sec')"
                         :labels="crawlingDurationMetric.map((item: MetricType) => item.date)"
+                        :accentColor="accentColor"
                     />
                     <LineChart
                         v-if="downloadSpeedMetric.length"
@@ -80,6 +83,7 @@ const queryParam: string = window.location.search;
                         :data="downloadSpeedMetric.map((item: MetricType) => Math.round(item.value / 1024 / 1024))"
                         :dataTitle="$t('download_speed_mbps')"
                         :labels="downloadSpeedMetric.map((item: MetricType) => item.date)"
+                        :accentColor="accentColor"
                     />
                 </div>
             </div>
@@ -97,12 +101,14 @@ const queryParam: string = window.location.search;
                         :data="ownersMarketShare.slice(0, 19).map((item: OwnerMarketShareType) => item.domain_count)"
                         :dataTitle="$t('domain_count')"
                         :labels="ownersMarketShare.slice(0, 19).map((item: OwnerMarketShareType) => item.owner)"
+                        :accentColor="accentColor"
                     />
                     <BarChart
                         :title="$t('owner_marketshare')"
                         :data="ownersMarketShare.slice(0, 19).map((item: OwnerMarketShareType) => item.domain_count)"
                         :dataTitle="$t('domain_count')"
                         :labels="ownersMarketShare.slice(0, 19).map((item: OwnerMarketShareType) => item.owner)"
+                        :accentColor="accentColor"
                     />
                 </div>
                 <div class="grid grid-rows-1 gap-4 xl:grid-rows-2 xl:gap-6" v-if="registrarsMarketShare.length">
@@ -111,12 +117,14 @@ const queryParam: string = window.location.search;
                         :data="registrarsMarketShare.slice(0, 19).map((item: RegistrarMarketShareType) => item.domain_count)"
                         :dataTitle="$t('domain_count')"
                         :labels="registrarsMarketShare.slice(0, 19).map((item: RegistrarMarketShareType) => item.registrar)"
+                        :accentColor="accentColor"
                     />
                     <BarChart
                         :title="$t('registrar_marketshare')"
                         :data="registrarsMarketShare.slice(0, 19).map((item: RegistrarMarketShareType) => item.domain_count)"
                         :dataTitle="$t('domain_count')"
                         :labels="registrarsMarketShare.slice(0, 19).map((item: RegistrarMarketShareType) => item.registrar)"
+                        :accentColor="accentColor"
                     />
                 </div>
                 <div class="grid grid-rows-1 gap-4 xl:grid-rows-2 xl:gap-6" v-if="nameserverMarketShare.length">
@@ -125,19 +133,26 @@ const queryParam: string = window.location.search;
                         :data="nameserverMarketShare.slice(0, 19).map((item: NameServerMarketShareType) => item.count)"
                         :dataTitle="$t('domain_count')"
                         :labels="nameserverMarketShare.slice(0, 19).map((item: NameServerMarketShareType) => item.ns)"
+                        :accentColor="accentColor"
                     />
                     <BarChart
                         :title="$t('ns_marketshare')"
                         :data="nameserverMarketShare.slice(0, 19).map((item: NameServerMarketShareType) => item.count)"
                         :dataTitle="$t('domain_count')"
                         :labels="nameserverMarketShare.slice(0, 19).map((item: NameServerMarketShareType) => item.ns)"
+                        :accentColor="accentColor"
                     />
                 </div>
             </div>
 
             <h1 class="font-size-2xl brand-text col-span-12" v-if="calendarHeatmapByDay.length">{{ $t('expiring_domains_heatmap') }}</h1>
             <div class="grid grid-cols-1 gap-4 xl:grid-cols-1 xl:gap-6" v-if="calendarHeatmapByDay.length">
-                <CalendarHeatMap :title="$t('expiring_domains_count')" :data="calendarHeatmapByDay" :months="$t('months')" :levels="$t('levels')" />
+                <CalendarHeatMap
+                    :title="$t('expiring_domains_count')"
+                    :data="calendarHeatmapByDay"
+                    :months="$t('months')"
+                    :levels="$t('levels')"
+                />
             </div>
             <div v-if="!domainStatistics">
                 <h3 class="text-center text-gray-500">{{ $t('no_data_yet') }}</h3>
