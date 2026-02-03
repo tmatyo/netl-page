@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import VueApexCharts from 'vue3-apexcharts';
 
 interface Props {
     title: string;
@@ -42,7 +41,7 @@ const chartOptions = ref({
 
         <div class="custom-scrollbar max-w-full overflow-x-auto">
             <div id="chartOne" class="-ml-5 min-w-[650px] pl-2 xl:min-w-full">
-                <VueApexCharts type="pie" height="auto" :options="chartOptions" :series="series" />
+                <apexchart type="pie" height="auto" :options="chartOptions" :series="series" />
             </div>
         </div>
     </div>
