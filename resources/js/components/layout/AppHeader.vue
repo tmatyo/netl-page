@@ -88,10 +88,7 @@
 import { ref } from 'vue'
 import { useSidebar } from '@/composables/useSidebar'
 import ThemeToggler from '../common/ThemeToggler.vue'
-import SearchBar from './header/SearchBar.vue'
 import HeaderLogo from './header/HeaderLogo.vue'
-import NotificationMenu from './header/NotificationMenu.vue'
-import UserMenu from './header/UserMenu.vue'
 import LanguageSwitch from '../common/LanguageSwitch.vue'
 
 const { toggleSidebar, toggleMobileSidebar, isMobileOpen } = useSidebar()
@@ -102,14 +99,6 @@ const handleToggle = () => {
   } else {
     toggleMobileSidebar()
   }
-}
-
-const dropdownOpen = ref(false)
-const notifying = ref(false)
-
-const toggleDropdown = () => {
-  dropdownOpen.value = !dropdownOpen.value
-  notifying.value = false
 }
 
 const isApplicationMenuOpen = ref(false)
