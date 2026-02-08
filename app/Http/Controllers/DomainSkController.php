@@ -11,7 +11,7 @@ use App\Models\Domain;
 use App\Models\DomainStatistic;
 use App\Models\OwnerMarketShare;
 use App\Models\RegistrarMarketShare;
-use App\Models\NameserverMarketShare;
+use App\Models\NameServerMarketShare;
 use App\Models\Metric;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
@@ -22,13 +22,13 @@ class DomainSkController extends Controller
     {
         $crawlingInfo = null;
         $domainStatistics = null;
-        $numberOfDomainsMetric = null;
-        $crawlingDurationMetric = null;
-        $downloadSpeedMetric = null;
-        $calendarHeatmapByDay = null;
-        $ownersMarketShare = null;
-        $registrarsMarketShare = null;
-        $nameserverMarketShare = null;
+        $numberOfDomainsMetric = [];
+        $crawlingDurationMetric = [];
+        $downloadSpeedMetric = [];
+        $calendarHeatmapByDay = [];
+        $ownersMarketShare = [];
+        $registrarsMarketShare = [];
+        $nameserverMarketShare = [];
 
         try {
             $crawlingInfo = Crawling::orderBy('time_generated', 'asc')->take(2)->get();
@@ -39,7 +39,7 @@ class DomainSkController extends Controller
             $calendarHeatmapByDay = CalendarHeatmapByDay::orderBy('expiry_day', 'asc')->take(365)->get(['expiry_day', 'domain_count']);
             $ownersMarketShare = OwnerMarketShare::query()->orderBy('domain_count', 'desc')->take(10)->get(['domain_count', 'owner']);
             $registrarsMarketShare = RegistrarMarketShare::query()->orderBy('domain_count', 'desc')->take(10)->get(['domain_count', 'registrar']);
-            $nameserverMarketShare = NameserverMarketShare::query()->orderBy('count', 'desc')->take(10)->get(['count', 'ns']);
+            $nameserverMarketShare = NameServerMarketShare::query()->orderBy('count', 'desc')->take(10)->get(['count', 'ns']);
         } catch (Throwable $ex) {
             Log::error("HOME PAGE: Data query failed: ", ['exception' => $ex->getMessage()]);
         }
@@ -131,7 +131,7 @@ class DomainSkController extends Controller
     {
         $nameservers = [];
         $error = null;
-        $query = NameserverMarketShare::query();
+        $query = NameServerMarketShare::query();
 
         if ($request->filled('search')) {
             $query->where('ns', 'like', '%' . $request->search . '%');
