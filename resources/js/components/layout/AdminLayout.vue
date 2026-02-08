@@ -15,6 +15,8 @@
             <!-- Footer -->
             <footer class="mx-auto max-w-(--breakpoint-2xl) p-4 pt-0 md:p-6">
                 <p class="text-center text-sm text-gray-500 dark:text-gray-400">
+                    WatchDog.sk |
+                    {{ commitHash !== 'unknown' ? 'Version: ' + commitHash.slice(0, 7) + ' | ' : '' }}
                     {{ $t('heavily_inspired_by') }}
                     <a
                         href="https://tailadmin.com/"
@@ -38,4 +40,5 @@ import AppSidebar from './AppSidebar.vue';
 import Backdrop from './Backdrop.vue';
 const { isExpanded, isHovered } = useSidebar();
 defineProps<{ noData?: boolean }>();
+const commitHash = import.meta.env.VITE_SOURCE_COMMIT || 'unknown';
 </script>
