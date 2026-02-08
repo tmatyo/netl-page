@@ -24,7 +24,7 @@ const search = (searchText: string) => {
     <AdminLayout>
         <div class="my-3" v-if="domains.data.length > 0">
         <h1 class="font-size-3xl brand-text">
-            Domain List <small class="text-gray-700">({{ domains.total }})</small>
+            {{ $t('domain_list') }} <small class="text-gray-700">({{ domains.total }})</small>
         </h1>
         <SearchBar :searchTerm="searchQuery ?? ''" @search="(searchQuery: string) => search(searchQuery)" />
             <Pagination
@@ -39,19 +39,19 @@ const search = (searchText: string) => {
             />
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                 <table class="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
-                    <thead class="bg-gray-50 text-xs text-gray-700 uppercase dark:bg-gray-700 dark:text-gray-400">
+                    <thead class="bg-gray-50 text-xs text-gray-700 uppercase dark:bg-brand-600 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="px-6 py-3">#</th>
-                            <th scope="col" class="px-6 py-3">Domain</th>
-                            <th scope="col" class="px-6 py-3">Registrar</th>
-                            <th scope="col" class="px-6 py-3">Owner</th>
-                            <th scope="col" class="px-6 py-3">Name servers</th>
-                            <th scope="col" class="px-6 py-3">Expiration date</th>
+                            <th scope="col" class="px-6 py-3">{{ $t('domain') }}</th>
+                            <th scope="col" class="px-6 py-3">{{ $t('registrar') }}</th>
+                            <th scope="col" class="px-6 py-3">{{ $t('owner') }}</th>
+                            <th scope="col" class="px-6 py-3">{{ $t('name_servers') }}</th>
+                            <th scope="col" class="px-6 py-3">{{ $t('expiration_date') }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr
-                            class="border-b border-gray-200 odd:bg-white even:bg-gray-50 dark:border-gray-700 odd:dark:bg-gray-900 even:dark:bg-gray-800"
+                            class="border-b border-gray-200 odd:bg-white even:bg-gray-50 dark:border-brand-600 odd:dark:bg-brand-800 even:dark:bg-brand-700"
                             v-for="d in domains.data"
                             :key="d.id"
                         >

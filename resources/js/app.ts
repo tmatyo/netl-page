@@ -16,6 +16,7 @@ import VueApexCharts from 'vue3-apexcharts';
 import SidebarProvider from './components/layout/SidebarProvider.vue';
 import ThemeProvider from './components/layout/ThemeProvider.vue';
 import { t } from './helpers/i18n';
+import VueCookies from 'vue-cookies';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 const appGtag = import.meta.env.VITE_GTAG || '';
@@ -46,6 +47,7 @@ createInertiaApp({
         });
         app.use(plugin);
         app.use({ install: (app) => (app.config.globalProperties.$t = t) });
+        app.use(VueCookies, { expires: '30d' });
         app.use(VueApexCharts);
         app.use(gtag);
         app.mount(el);

@@ -17,6 +17,7 @@
                 <p class="text-center text-sm text-gray-500 dark:text-gray-400">
                     WatchDog.sk |
                     {{ commitHash !== 'unknown' ? 'Version: ' + commitHash.slice(0, 7) + ' | ' : '' }}
+                    {{ $t('data_source') }} |
                     {{ $t('heavily_inspired_by') }}
                     <a
                         href="https://tailadmin.com/"
@@ -26,10 +27,10 @@
                     >
                         TailAdmin
                     </a>
-                    .
                 </p>
             </footer>
         </div>
+        <CookieConsent />
     </div>
 </template>
 
@@ -38,6 +39,7 @@ import { useSidebar } from '@/composables/useSidebar';
 import AppHeader from './AppHeader.vue';
 import AppSidebar from './AppSidebar.vue';
 import Backdrop from './Backdrop.vue';
+import CookieConsent from '../common/CookieConsent.vue';
 const { isExpanded, isHovered } = useSidebar();
 defineProps<{ noData?: boolean }>();
 const commitHash = import.meta.env.VITE_SOURCE_COMMIT || 'unknown';

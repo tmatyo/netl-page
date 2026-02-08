@@ -13,7 +13,7 @@ const searchTerm = ref<string>(props.searchTerm || '');
 
 const onSearch = (event: Event) => {
     event.preventDefault();
-    if(searchTerm.value.trim() === '' || searchTerm.value.length < 3) {
+    if (searchTerm.value.trim() === '' || searchTerm.value.length < 3) {
         return;
     }
     emit('search', searchTerm.value);
@@ -21,7 +21,7 @@ const onSearch = (event: Event) => {
 </script>
 <template>
     <form @submit="onSearch" class="my-4">
-        <label for="search" class="sr-only mb-2 text-sm font-medium text-gray-900 dark:text-white">Search</label>
+        <label for="search" class="sr-only mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ $t('search') }}</label>
         <div class="relative">
             <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3 dark:text-gray-500">
                 <svg
@@ -40,17 +40,17 @@ const onSearch = (event: Event) => {
                 v-model="searchTerm"
                 type="search"
                 id="search"
-                class="border-default-medium text-heading rounded border-gray-300 dark:brand-border focus:ring-brand focus:border-brand placeholder:text-body block w-full border p-3 ps-9 text-sm shadow-xs text-gray-800 dark:text-gray-300"
-                placeholder="Search"
+                class="border-default-medium text-heading dark:brand-border focus:border-brand placeholder:text-body block w-full rounded border border-gray-300 p-3 ps-9 text-sm text-gray-800 shadow-xs dark:text-gray-300"
+                :placeholder="$t('search')"
                 minlength="3"
                 maxlength="256"
                 required
             />
             <button
                 type="submit"
-                class="hover:bg-brand-strong focus:ring-brand-medium absolute end-1.5 bottom-1.5 box-border rounded border border-transparent bg-[var(--color-brand-text)] px-3 py-1.5 text-xs leading-5 font-medium text-white shadow-xs focus:ring-4 focus:outline-none"
+                class="hover:bg-brand-strong absolute end-1.5 bottom-1.5 box-border rounded border border-transparent bg-[var(--color-brand-text)] px-3 py-1.5 text-xs leading-5 font-medium text-white shadow-xs"
             >
-                Search
+                {{ $t('search') }}
             </button>
         </div>
     </form>

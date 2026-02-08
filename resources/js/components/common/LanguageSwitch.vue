@@ -13,10 +13,10 @@ const switchLocale = (locale: string) => {
         <button
             v-for="lang in page.props.locales"
             @click="switchLocale(lang)"
-            class="focus:ring-brand-medium box-border w-auto rounded border px-3 py-1.5 text-xs font-medium  uppercase "
+            class="focus:ring-brand-medium box-border w-auto rounded border px-3 py-1.5 text-xs font-medium uppercase "
             :class="{
-                'text-gray-200 border-transparent bg-[var(--color-brand-text)]': page.props.locale === lang,
-                'border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-200 hover:border-[var(--color-brand-200)]': page.props.locale !== lang,
+                'text-gray-100 border-transparent bg-[var(--color-brand-text)]': page.props.locale === lang,
+                'border-gray-200 dark:brand-border text-gray-500 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800': page.props.locale !== lang,
             }"
         >
             {{ lang }}

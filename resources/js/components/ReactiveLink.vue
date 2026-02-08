@@ -4,8 +4,8 @@ defineProps<{ link: string; label: string; disabled: boolean }>();
 </script>
 <template>
     <Link
-        class="dark:bg-dark-background border-sidebar-border/70 bg-background hover:bg-sidebar-border/10 dark:border-sidebar-border hover:dark:bg-sidebar-border/10 cursor-pointer rounded border px-3 py-1 text-sm text-gray-700 dark:text-gray-400 border-gray-700 dark:border-gray-400"
-        :class="disabled && 'pointer-events-none cursor-not-allowed opacity-50 disabled:cursor-not-allowed disabled:opacity-50'"
+        class="hover:bg-gray-200 dark:hover:bg-gray-800 cursor-pointer rounded border px-3 py-1 text-sm border-gray-200 dark:brand-border text-gray-500 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-200"
+        :class="disabled && 'pointer-events-none cursor-not-allowed opacity-20 disabled:cursor-not-allowed disabled:opacity-20'"
         :href="link"
         :aria-label="label"
         :disabled="disabled"
