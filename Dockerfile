@@ -34,15 +34,16 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# Set PHP ini
 RUN { \
-        echo "upload_max_filesize=150M"; \
-        echo "post_max_size=150M"; \
-        echo "memory_limit=512M"; \
-        echo "max_file_uploads=20"; \
-        echo "max_execution_time=300"; \
-        echo "max_input_time=300"; \
-} > /usr/local/etc/php/conf.d/uploads.ini
+    echo "upload_max_filesize=150M"; \
+    echo "post_max_size=150M"; \
+    echo "memory_limit=512M"; \
+    echo "max_execution_time=300"; \
+    echo "max_input_time=300"; \
+    } > /usr/local/etc/php/conf.d/uploads.ini
 
+# Set working directory
 WORKDIR /var/www/html
 
 # Copy only package files first
@@ -51,16 +52,17 @@ COPY package.json package-lock.json ./
 # Install Node.js and NPM, then install JS dependencies
 RUN apk add --no-cache nodejs npm && npm install
 
-# Copy backend
+# Copy application
 COPY . .
-ENV APP_ENV=production
-ENV APP_DEBUG=false
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
 # Build front-end assets
 RUN npm run build
+
+# Laravel optimizations
+RUN php artisan config:cache && php artisan route:cache && php artisan view:cache
 
 # Permissions
 RUN chown -R www-data:www-data storage bootstrap/cache \
@@ -69,7 +71,9 @@ RUN chown -R www-data:www-data storage bootstrap/cache \
 # Nginx config
 COPY nginx.conf /etc/nginx/nginx.conf
 
+ENV APP_ENV=production
+ENV APP_DEBUG=false
+
 EXPOSE 80
 
-# Proper foreground startup
 CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
