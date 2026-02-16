@@ -57,6 +57,12 @@ export type NameServerMarketShareType = {
     percentage: string;
 };
 
+export type ExpiringDomainType = {
+    id: number;
+    domain: string;
+    expiry_date: string;
+};
+
 export type CalendarHeatmapByDayType = {
     expiry_day: string;
     domain_count: number;
@@ -103,6 +109,12 @@ export type RegistrarMarketSharePropsType = {
 
 export type NameServerMarketSharePropsType = {
     nameserverMarketShare: PaginationType<NameServerMarketShareType>;
+    error: string | null;
+    searchQuery?: string;
+};
+
+export type ExpiringDomainsPropsType = {
+    expiringDomains: PaginationType<ExpiringDomainType>;
     error: string | null;
     searchQuery?: string;
 };

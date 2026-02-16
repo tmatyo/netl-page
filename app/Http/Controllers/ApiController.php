@@ -88,7 +88,7 @@ class ApiController extends Controller
                 $domainSk->saveDomains($data['domains'] ?? []);
 
                 # save expiring domains
-                $expiringDomains->saveExpiringDomains($data['expiring_domains_next_30_days'] ?? []);
+                $expiringDomains->saveExpiringDomains($data['expiring_domains_next_days'] ?? []);
 
                 # Create and save DomainStatistic
                 $domainStatistic = new DomainStatistic([

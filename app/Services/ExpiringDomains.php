@@ -28,14 +28,14 @@ class ExpiringDomains
         for ($i = 0; $i < $domainCount; $i++) {
             $parsedValues[] = sprintf(
                 '("%1$s", "%2$s", "%3$s", "%4$s")',
-                $domains['domain'] ?? null,
-                $domains['expiry_date'] ?? null,
+                $domains[$i]['domain'] ?? null,
+                $domains[$i]['expiry_date'] ?? null,
                 $now,
                 $now
             );
 
             # insert in chunks
-            if (count($parsedValues) >= $limit) {
+            if (count($parsedValues) == $limit || ($i + 1) == $domainCount) {
                 try {
                     $values = implode(",", $parsedValues);
                     DB::statement("INSERT INTO {$tableName} (domain, expiry_date, created_at, updated_at) VALUES {$values}");

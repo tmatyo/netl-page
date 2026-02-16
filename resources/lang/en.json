@@ -31,6 +31,7 @@
     "registrar_list": "Registrar market share",
     "owner_list": "Owner market share",
     "ns_list": "Name server market share",
+    "expiring_domains": "Expiring domains",
     "percentage": "Percentage",
     "search": "Search",
     "sidebar_domains_title": "SK Domain statistics",

@@ -9,6 +9,7 @@ use App\Models\CalendarHeatmapByDay;
 use App\Models\Crawling;
 use App\Models\Domain;
 use App\Models\DomainStatistic;
+use App\Models\ExpiringDomain;
 use App\Models\OwnerMarketShare;
 use App\Models\RegistrarMarketShare;
 use App\Models\NameServerMarketShare;
@@ -145,6 +146,29 @@ class DomainSkController extends Controller
 
         return Inertia::render('Domenask/NameserverMarketshare', [
             'nameserverMarketShare' => $nameservers,
+            'searchQuery' => $request->filled('search') ? $request->search : '',
+            'error' => $error
+        ]);
+    }
+
+    public function expiringDomains(Request $request)
+    {
+        $expiringDomains = [];
+        $error = null;
+        $query = ExpiringDomain::query();
+
+        if ($request->filled('search')) {
+            $query->where('domain', 'like', '%' . $request->search . '%');
+        }
+
+        try {
+            $expiringDomains = $query->orderBy('expiry_date', 'asc')->paginate(20)->withQueryString();
+        } catch (Exception $e) {
+            $error = $e->getMessage();
+        }
+
+        return Inertia::render('Domenask/ExpiringDomains', [
+            'expiringDomains' => $expiringDomains,
             'searchQuery' => $request->filled('search') ? $request->search : '',
             'error' => $error
         ]);

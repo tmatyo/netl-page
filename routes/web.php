@@ -18,6 +18,7 @@ Route::get('/domainsk/domain-list', [DomainSkController::class, 'domainList'])->
 Route::get('/domainsk/owners-marketshare', [DomainSkController::class, 'ownersMarketshare'])->name('domainsk.owners-marketshare');
 Route::get('/domainsk/registrars-marketshare', [DomainSkController::class, 'registrarsMarketshare'])->name('domainsk.registrars-marketshare');
 Route::get('/domainsk/nameserver-marketshare', [DomainSkController::class, 'nameserverMarketshare'])->name('domainsk.nameserver-marketshare');
+Route::get('/domainsk/expiring-domains', [DomainSkController::class, 'expiringDomains'])->name('domainsk.expiring-domains');
 
 Route::prefix('api')->withoutMiddleware([VerifyCsrfToken::class])->group(function () {
     Route::get('/', [ApiController::class, 'index'])->name('api.index');

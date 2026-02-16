@@ -32,6 +32,7 @@ const menuGroups = computed<MenuGroupType[]>(() => [
             { icon: ListIcon, name: $t('owners'), path: '/domainsk/owners-marketshare' },
             { icon: ListIcon, name: $t('registrars'), path: '/domainsk/registrars-marketshare' },
             { icon: ListIcon, name: $t('nameservers'), path: '/domainsk/nameserver-marketshare' },
+            { icon: ListIcon, name: $t('expiring_domains'), path: '/domainsk/expiring-domains' },
         ],
     },
 ]);

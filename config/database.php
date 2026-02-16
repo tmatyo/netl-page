@@ -125,11 +125,12 @@ return [
     |
     */
 
-    'tables_to_rotate' => ['calendar_heatmap_by_days', 'crawlings', 'domains', 'name_server_market_shares', 'owner_market_shares', 'registrar_market_shares', 'metrics'],
+    'tables_to_rotate' => ['calendar_heatmap_by_days', 'crawlings', 'domains', 'name_server_market_shares', 'owner_market_shares', 'registrar_market_shares', 'metrics', 'expiring_domains'],
     'migrations_to_rotate' => [
         '2025_11_24_211120_create_domains_table',
         '2025_11_24_225534_create_crawling_table',
         '2025_11_24_230458_create_metrics_table',
+        '2025_11_24_231306_create_expiring_domains_table',
         '2025_11_26_203220_create_owner_market_shares_table',
         '2025_11_26_204028_create_registrar_market_shares_table',
         '2025_11_26_204934_create_name_server_market_shares_table',
