@@ -14,6 +14,8 @@ use App\Models\OwnerMarketShare;
 use App\Models\RegistrarMarketShare;
 use App\Models\NameServerMarketShare;
 use App\Models\Metric;
+use App\Models\NewDomain;
+use App\Models\ExpiredDomain;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
 
@@ -30,6 +32,8 @@ class DomainSkController extends Controller
         $ownersMarketShare = [];
         $registrarsMarketShare = [];
         $nameserverMarketShare = [];
+        $expiredDomains = [];
+        $newDomains = [];
 
         try {
             $crawlingInfo = Crawling::orderBy('time_generated', 'asc')->take(2)->get();
@@ -41,6 +45,8 @@ class DomainSkController extends Controller
             $ownersMarketShare = OwnerMarketShare::query()->orderBy('domain_count', 'desc')->take(10)->get(['domain_count', 'owner']);
             $registrarsMarketShare = RegistrarMarketShare::query()->orderBy('domain_count', 'desc')->take(10)->get(['domain_count', 'registrar']);
             $nameserverMarketShare = NameServerMarketShare::query()->orderBy('count', 'desc')->take(10)->get(['count', 'ns']);
+            $expiredDomains = ExpiredDomain::pluck('domain')->toArray();
+            $newDomains = NewDomain::pluck('domain')->toArray();
         } catch (Throwable $ex) {
             Log::error("HOME PAGE: Data query failed: ", ['exception' => $ex->getMessage()]);
         }
@@ -56,6 +62,8 @@ class DomainSkController extends Controller
             'ownersMarketShare' => $ownersMarketShare,
             'registrarsMarketShare' => $registrarsMarketShare,
             'nameserverMarketShare' => $nameserverMarketShare,
+            'expiredDomains' => $expiredDomains,
+            'newDomains' => $newDomains,
         ]);
     }
 

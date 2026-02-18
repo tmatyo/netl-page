@@ -32,6 +32,8 @@
     "owner_list": "Owner market share",
     "ns_list": "Name server market share",
     "expiring_domains": "Expiring domains",
+    "expired_domains": "Domains expired yesterday",
+    "new_domains": "Domains registered yesterday",
     "percentage": "Percentage",
     "search": "Search",
     "sidebar_domains_title": "SK Domain statistics",

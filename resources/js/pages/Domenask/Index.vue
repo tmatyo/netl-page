@@ -4,6 +4,7 @@ import CalendarHeatMap from '@/components/ecommerce/CalendarHeatMap.vue';
 import LineChart from '@/components/ecommerce/LineChart.vue';
 import PieChart from '@/components/ecommerce/PieChart.vue';
 import AdminLayout from '@/components/layout/AdminLayout.vue';
+import WordCloud from '@/components/WordCloud.vue';
 import {
     CalendarHeatmapByDayType,
     CrawlInfo,
@@ -27,6 +28,8 @@ const props = defineProps<{
     ownersMarketShare: OwnerMarketShareType[];
     registrarsMarketShare: RegistrarMarketShareType[];
     nameserverMarketShare: NameServerMarketShareType[];
+    expiredDomains: string[];
+    newDomains: string[];
 }>();
 const crawlingInfoKeyword: string = 'agent=007';
 const queryParam: string = window.location.search;
@@ -146,14 +149,20 @@ const accentColor: string = window.getComputedStyle(document.body).getPropertyVa
             </div>
 
             <h1 class="font-size-2xl brand-text col-span-12" v-if="calendarHeatmapByDay.length">{{ $t('expiring_domains_heatmap') }}</h1>
-            <div class="grid grid-cols-1 gap-4 xl:grid-cols-1 xl:gap-6" v-if="calendarHeatmapByDay.length">
-                <CalendarHeatMap
-                    :title="$t('expiring_domains_count')"
-                    :data="calendarHeatmapByDay"
-                    :months="$t('months')"
-                    :levels="$t('levels')"
-                />
+            <div class="mb-6 grid grid-cols-1 gap-4 xl:grid-cols-1 xl:gap-6" v-if="calendarHeatmapByDay.length">
+                <CalendarHeatMap :title="$t('expiring_domains_count')" :data="calendarHeatmapByDay" :months="$t('months')" :levels="$t('levels')" />
             </div>
+
+            <h1 class="font-size-2xl brand-text col-span-12" v-if="expiredDomains.length">{{ $t('expired_domains') }}</h1>
+            <div class="mb-6 grid grid-cols-1 gap-4 xl:grid-cols-1 xl:gap-6" v-if="expiredDomains.length">
+                <WordCloud :data="expiredDomains" />
+            </div>
+
+            <h1 class="font-size-2xl brand-text col-span-12" v-if="newDomains.length">{{ $t('new_domains') }}</h1>
+            <div class="mb-6 grid grid-cols-1 gap-4 xl:grid-cols-1 xl:gap-6" v-if="newDomains.length">
+                <WordCloud :data="newDomains" />
+            </div>
+
             <div v-if="!domainStatistics">
                 <h3 class="text-center text-gray-500">{{ $t('no_data_yet') }}</h3>
             </div>

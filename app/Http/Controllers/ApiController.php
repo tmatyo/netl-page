@@ -15,6 +15,7 @@ use App\Models\NameServerMarketShare;
 use App\Services\DomainSk;
 use App\Services\Stats;
 use App\Services\ExpiringDomains;
+use App\Services\ExpiredAndNew;
 use App\Services\Metrics;
 use App\Services\TableRotation;
 use Throwable;
@@ -34,7 +35,7 @@ class ApiController extends Controller
         ]);
     }
 
-    public function import(Request $request, DomainSk $domainSk, Stats $stats, ExpiringDomains $expiringDomains, Metrics $metricService, TableRotation $tableRotation)
+    public function import(Request $request, DomainSk $domainSk, Stats $stats, ExpiringDomains $expiringDomains, ExpiredAndNew $expiredAndNew, Metrics $metricService, TableRotation $tableRotation)
     {
 
         # set higher memory limit and execution time
@@ -82,13 +83,21 @@ class ApiController extends Controller
                 throw new RuntimeException("Tables not prepared for next step. Stopping process.");
             }
 
-            DB::transaction(function () use ($data, $domainSk, $stats, $expiringDomains, $metricService) {
+            DB::transaction(function () use ($data, $domainSk, $stats, $expiringDomains, $expiredAndNew, $metricService) {
 
                 # save the domains
                 $domainSk->saveDomains($data['domains'] ?? []);
 
                 # save expiring domains
                 $expiringDomains->saveExpiringDomains($data['expiring_domains_next_days'] ?? []);
+
+                # save expired and new domains if any
+                if (isset($data['expired_domains']) && count($data['expired_domains']) > 0) {
+                    $expiredAndNew->saveExpiredDomains($data['expired_domains']);
+                }
+                if (isset($data['new_domains']) && count($data['new_domains']) > 0) {
+                    $expiredAndNew->saveNewDomains($data['new_domains']);
+                }
 
                 # Create and save DomainStatistic
                 $domainStatistic = new DomainStatistic([
