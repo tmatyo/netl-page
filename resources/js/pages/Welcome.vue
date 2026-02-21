@@ -8,7 +8,7 @@ import { Head, Link } from '@inertiajs/vue3';
     <Head title="Welcome">asdf </Head>
     <div class="dark:brand-bg flex min-h-screen flex-col items-center p-6 text-[#1b1b18] lg:justify-center lg:p-8">
         <div class="flex w-full items-center justify-center gap-5 opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0">
-            <main class="flex w-[50%] flex-col overflow-hidden">
+            <main class="flex sm:w-[50%] flex-col overflow-hidden">
                 <div class="flex flex-row gap-5 mb-6 items-center">
                     <Logo />
                     <div class="flex flex-col">

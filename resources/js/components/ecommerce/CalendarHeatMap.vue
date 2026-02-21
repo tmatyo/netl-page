@@ -121,7 +121,7 @@ const chartOptions = computed(() => ({
         </div>
 
         <div class="custom-scrollbar max-w-full overflow-x-auto">
-            <div id="chartOne" class="my-5 -ml-5 min-w-[650px] pl-5 xl:min-w-full">
+            <div id="chartOne" class="my-5 -ml-5 min-w-[1050px] pl-5 xl:min-w-full">
                 <VueApexCharts type="heatmap" height="550" :options="chartOptions" :series="monthlyData.slice().reverse()" />
             </div>
         </div>

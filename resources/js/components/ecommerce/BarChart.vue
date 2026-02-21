@@ -83,7 +83,7 @@ const chartOptions = ref({
         </div>
 
         <div class="custom-scrollbar max-w-full overflow-x-auto">
-            <div id="chartOne" class="-ml-5 min-w-[650px] pl-2 xl:min-w-full">
+            <div id="chartOne" class="-ml-5 min-w-full pl-2">
                 <VueApexCharts type="bar" height="auto" :options="chartOptions" :series="series" />
             </div>
         </div>
