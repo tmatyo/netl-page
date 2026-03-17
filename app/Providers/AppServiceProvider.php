@@ -22,6 +22,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
+        $this->app['request']->server->set('HTTPS', 'on');
+
         Inertia::share([
             'locales' => fn() => config('app.allowed_locales'),
             'locale' => fn() => App::getLocale(),
